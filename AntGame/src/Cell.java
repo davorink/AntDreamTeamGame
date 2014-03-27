@@ -4,12 +4,13 @@
  * @version 27/03/2014
  */
 public class Cell {
-	public CellType state;
+	public enum CellType { CLEARCELL, ROCKYCELL	}
+	private CellType state;
 	private Ant ant;
 	private int foodAmount;
 	private boolean redMarkers;
 	private boolean blackMarkers;
-	
+
 	/**
 	 * Construct an object
 	 * @param state State of a cell
@@ -61,9 +62,5 @@ public class Cell {
 
 	public CellType getState() {
 		return state;
-	}
-	
-	public enum CellType {
-		CLEARCELL, ROCKYCELL 
 	}
 }
