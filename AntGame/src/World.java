@@ -1,6 +1,6 @@
 /**
  * @author Davorin Kopic
- * @version 27/3/2014
+ * @version 28/3/2014
  */
 public class World {
 	private Cell[][] cells;
@@ -78,12 +78,12 @@ public class World {
 	}
 	
 	/**
-	 * XXXXXXX Check if works!!!
 	 * Returns the position of the given Ant. If Ant does not exist, returns null.
 	 * @param id Ant's id number
 	 * @return current position of the ant with the given id, null if not existing
 	 */
 	public pos find_ant(int id){
+		//TODO: Check if works!!!
 		for(int x=0; x!=cells.size(); x++){
 			for(int y=0; y!=cells[x].size(); y++){
 				if(cells[x][y].getAnt() != null){
@@ -103,4 +103,36 @@ public class World {
 	public void kill_ant_at(pos p){
 		clear_ant_at(p);
 	}
+	
+	/**
+	 * Get the amount of food in the cell at position p
+	 * @param p Position of the cell
+	 * @return amount of food in the cell at position p
+	 */
+	public int food_at(pos p){
+		return cells[p.getX()][p.getY()].getFoodAmount();
+	}
+	
+	
+	/**
+	 * Set the amount of food in the cell at position p
+	 * @param p Position of the cell
+	 */
+	public void set_food_at(pos p, int f){
+		cells[p.getX()][p.getY()].setFoodAmount(f);
+		//TODO: Should it be enforced that the amount of food is not negative?
+	}
+	
+
+	/**
+	 * Checks if the Cell contains an Ant.
+	 * @param p Position in the World
+	 * @param c Colour of the anthill
+	 * @return true if the cell at position p is in the anthill of color c
+	 */
+	public boolean anthill_at(pos p, color c){
+		//TODO: color must be team's color from Enums! and check if null works
+		return cells[p.getX()][p.getY()].getAnthillColor() == c;
+	}
+	
 }
