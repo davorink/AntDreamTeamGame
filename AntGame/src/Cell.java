@@ -4,7 +4,6 @@
  * @version 27/03/2014
  */
 public class Cell {
-	public enum CellType { CLEARCELL, ROCKYCELL	}
 	private CellType state;
 	private Ant ant;
 	private int foodAmount;
