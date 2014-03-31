@@ -1,65 +1,66 @@
 /**
  * A class to represent a cell
  * @author K Ratusznik
- * @version 27/03/2014
+ * @version 31/03/2014
  */
 public class Cell {
-	private CellType state;
+	private cellType state;
 	private Ant ant;
 	private int foodAmount;
-	private boolean redMarkers;
-	private boolean blackMarkers;
+	private marker redMarkers;
+	private marker blackMarkers;
 
 	/**
 	 * Construct an object
-	 * @param state State of a cell
-	 * @param ant 
-	 * @param foodAmount
-	 * @param redMarkers
-	 * @param blackMarkers
+	 * @param state State of a cell. Can be either CLEAR or ROCKY.
+	 * @param ant Ant at cell.
+	 * @param foodAmount Amount of food at a cell. Can be between 0 - 9.
 	 */
-	public Cell(CellType state, Ant ant, int foodAmount, boolean redMarkers, boolean blackMarkers) {
+	public Cell(cellType state, Ant ant, int foodAmount) {
 		this.state = state;
 		this.ant = ant;
 		this.foodAmount = foodAmount;
-		this.redMarkers = redMarkers;
-		this.blackMarkers = blackMarkers;
+		redMarkers = new marker();
+		blackMarkers = new marker();
 	}
 	
-	// Setters and getters
+	/**
+	 * Get a state of a cell.
+	 * @return state of a cell: CLEAR or ROCKY
+	 */
+	public cellType getState() {
+		return state;
+	}
+	
+	/**
+	 * Get an ant.
+	 * @return ant
+	 */
 	public Ant getAnt() {
 		return ant;
 	}
 
+	/**
+	 * Set ant.
+	 * @param ant  
+	 */
 	public void setAnt(Ant ant) {
 		this.ant = ant;
 	}
 
+	/**
+	 * Get a number of food particles.
+	 * @return a number of food particles
+	 */
 	public int getFoodAmount() {
 		return foodAmount;
 	}
 
+	/**
+	 * Set amount of food in a cell.
+	 * @param foodAmount 
+	 */
 	public void setFoodAmount(int foodAmount) {
 		this.foodAmount = foodAmount;
-	}
-
-	public boolean isRedMarkers() {
-		return redMarkers;
-	}
-
-	public void setRedMarkers(boolean redMarkers) {
-		this.redMarkers = redMarkers;
-	}
-
-	public boolean isBlackMarkers() {
-		return blackMarkers;
-	}
-
-	public void setBlackMarkers(boolean blackMarkers) {
-		this.blackMarkers = blackMarkers;
-	}
-
-	public CellType getState() {
-		return state;
 	}
 }

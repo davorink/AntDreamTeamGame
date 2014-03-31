@@ -14,12 +14,6 @@ public class WorldEngine {
 	private static Cell[][] grid= new Cell[x][y];
 	private static String file = "C:/Users/Hexeasaurus/Desktop/test.txt/";
 	
-	public static void main(String args[]) throws IOException{
-		WorldEngine w = new WorldEngine();
-		//loadWorld(file);
-		generateNewWorldFile();
-	}
-	
 	public WorldEngine(){
 		
 	}
@@ -29,7 +23,7 @@ public class WorldEngine {
 	 * @param fname name of file to load the world from
 	 * @throws IOException
 	 */
-	public static void loadWorld(String fname) throws IOException {
+	public void loadWorld(String fname) throws IOException {
 		FileReader fr = new FileReader(fname);
 		bfr = new BufferedReader(fr);
 		String line;
@@ -46,46 +40,46 @@ public class WorldEngine {
 					curChar = curLine[col];		
 					switch (curChar) {
 						case "#":// rocky cell
-							grid[row][col] = new Cell(CellType.ROCKYCELL, false, 0, false, false);
+							grid[row][col] = new Cell(cellType.ROCKYCELL, false, 0, false, false);
 							break;
 						case ".":// clear cell
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 0, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 0, false, false);
 							break;
 						case "+":// red anthill
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 0, true, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 0, true, false);
 							break;
 						case "-":// black anthill
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 0, false, true);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 0, false, true);
 							break;
 						case "1":// 1 food particle
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 1, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 1, false, false);
 							break;
 						case "2":// 2 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 2, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 2, false, false);
 							break;
 						case "3":// 3 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 3, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 3, false, false);
 							break;
 						case "4":// 4 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 4, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 4, false, false);
 							break;
 						case "5":// 5 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 5, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 5, false, false);
 							break;
 						case "6":// 6 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 6, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 6, false, false);
 							break;
 						case "7":// 7 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 7, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 7, false, false);
 							break;
 						case "8":// 8 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 8, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 8, false, false);
 							break;
 						case "9":// 9 food particles
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 9, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 9, false, false);
 							break;
 						default:
-							grid[row][col] = new Cell(CellType.CLEARCELL, false, 0, false, false);
+							grid[row][col] = new Cell(cellType.CLEARCELL, false, 0, false, false);
 							break;
 					}
 				}
@@ -96,7 +90,7 @@ public class WorldEngine {
 	/**
 	 * Check world's validity
 	 */
-	public static boolean validateWorld(Cell[][] grid) {
+	public boolean validateWorld(Cell[][] grid) {
 		
 		return false;
 	}
@@ -108,7 +102,7 @@ public class WorldEngine {
 	/**
 	 * Generate new world file
 	 */
-	public static void generateNewWorldFile() {
+	public void generateNewWorldFile() {
 		try {
 			String content = "This is the content to write into file";
 			 

@@ -1,37 +1,52 @@
 /**
  * A class to represent a player
  * @author K Ratusznik
- * @version 27/03/2014
+ * @version 31/03/2014
  */
 
 public class Player {
-	private int id;
+	private String name;
 	private String color;
 	
 	/**
 	 * Construct an object
-	 * @param id Player's ID
+	 * @param name Player's name
 	 * @param color Player's color
 	 */
-	public Player(int id, String color) {
-		this.id = id;
+	public Player(String name, String color) {
+		this.name = name;
 		this.color = color;
 	}
 
-	// Setters and getters
-	public int getId() {
-		return id;
+	/**
+	 * Get name.
+	 * @return player's name
+	 */
+	public String getName() {
+		return name;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	/**
+	 * Set name.
+	 * @param name player's new name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getColor() {
-		return color;
+	/**
+	 * Get colour.
+	 * @return player's colour
+	 */
+	public Colour getColour() {
+		return colour;
 	}
 
-	public void setColor(String color) {
-		this.color = color;
+	/**
+	 * Set colour. 
+	 * @param colour player's new colour
+	 */
+	public void setColor(Colour colour) {
+		this.colour = colour;
 	}
 }
