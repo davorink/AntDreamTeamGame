@@ -14,7 +14,7 @@ public class Cell {
 	 * Construct an object
 	 * @param state State of a cell. Can be either CLEAR or ROCKY.
 	 * @param ant Ant at cell.
-	 * @param foodAmount Amount of food at a cell. Can be between 0 - 9.
+	 * @param foodAmount Amount of food at a cell. Can be between 
 	 */
 	public Cell(cellType state, Ant ant, int foodAmount) {
 		this.state = state;
