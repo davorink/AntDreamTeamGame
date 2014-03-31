@@ -135,4 +135,116 @@ public class World {
 		return cells[p.getX()][p.getY()].getAnthillColor() == c;
 	}
 	
+	
+	public void set_marker_at(pos p, color c, int marker){
+		cells[p.getX()][p.getY()].setMarker(c,marker,true);
+	}
+	
+	public void clear_marker_at(pos p, color c, int marker){
+		cells[p.getX()][p.getY()].setMarker(c,marker,false);
+	}
+	
+	public boolean check_marker_at(pos p, color c, int marker){
+		cells[p.getX()][p.getY()].getMarker(c,marker);
+	}
+	
+	public boolean check_any_marker_at(pos p, color c){
+		for(i=0;i<=5;i++){
+			if(cells[p.getX()][p.getY()].getMarker(c,i))return true;
+		}
+		return false;
+	}
+	
+
+	
+	
+	/*
+	public boolean cell_matches(pos p, condition cond, color c){
+		
+		if(rocky(p)){
+			if(cond == condition.Rock){
+				return true;
+			}else{
+				return false;
+			}else{
+				
+				
+				
+				
+				
+			}
+		}
+		
+	if rocky(p) then
+	    if cond = Rock then true else false
+	else
+	    switch cond of
+	      case Friend:
+	        some_ant_is_at(p) &&
+	        color(ant_at(p)) = c
+	      case Foe:
+	        some_ant_is_at(p) &&
+	        color(ant_at(p)) <> c
+	      case FriendWithFood:
+	        some_ant_is_at(p) &&
+	        color(ant_at(p)) = c &&
+	        has_food(ant_at(p))
+	      case FoeWithFood:
+	        some_ant_is_at(p) &&
+	        color(ant_at(p)) <> c &&
+	        has_food(ant_at(p))
+	      case Food:
+	        food_at(p) > 0
+	      case Rock:
+	        false
+	      case Marker(i):
+	        check_marker_at(p, c, i)
+	      case FoeMarker:
+	        check_any_marker_at(p, other_color(c))
+	      case Home:
+	        anthill_at(p, c)
+	      case FoeHome:
+	        anthill_at(p, other_color(c))		
+		
+	}
+	
+	
+	
+	/*
+	 The function cell_matches takes a position p, a condition cond, and a color c (the color of the ant that is doing the sensing), and checks whether cond holds at p.
+
+function cell_matches(p:pos, cond:condition, c:color):bool =
+  if rocky(p) then
+    if cond = Rock then true else false
+  else
+    switch cond of
+      case Friend:
+        some_ant_is_at(p) &&
+        color(ant_at(p)) = c
+      case Foe:
+        some_ant_is_at(p) &&
+        color(ant_at(p)) <> c
+      case FriendWithFood:
+        some_ant_is_at(p) &&
+        color(ant_at(p)) = c &&
+        has_food(ant_at(p))
+      case FoeWithFood:
+        some_ant_is_at(p) &&
+        color(ant_at(p)) <> c &&
+        has_food(ant_at(p))
+      case Food:
+        food_at(p) > 0
+      case Rock:
+        false
+      case Marker(i):
+        check_marker_at(p, c, i)
+      case FoeMarker:
+        check_any_marker_at(p, other_color(c))
+      case Home:
+        anthill_at(p, c)
+      case FoeHome:
+        anthill_at(p, other_color(c))
+	 */
+	
+	
 }
