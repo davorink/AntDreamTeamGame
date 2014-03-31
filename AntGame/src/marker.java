@@ -3,6 +3,29 @@
  * @author Kornelia Ratusznik
  * @version 31/3/2014
  */
-public enum marker {
-	0, 1, 2, 3, 4, 5
+public class marker {
+	private boolean[]markers;
+	public marker(boolean[]markers){
+		if(markers.length==6)this.markers = markers;
+		else throw new Exception("Marker length is wrong");
+	}
+	public boolean[] getMarkers() {
+		return markers;
+	}
+	public void setMarkers(boolean[] markers) {
+		if(markers.length==6)this.markers = markers;
+		else throw new Exception("Marker length is wrong");
+	}
+	
+	public boolean getMarker(int index){
+		if(index >= 0 && index <= 5) return markers[index];
+		else throw new Exception("Marker out of bounds");
+	}
+	
+	public void setMarker(int index, boolean newMarker){
+		if(index >= 0 && index <= 5) markers[index] = newMarker;
+		else throw new Exception("Marker out of bounds");
+	}
+	
+	
 }
