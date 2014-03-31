@@ -15,7 +15,7 @@ public class AntFactory {
 	 */
 	public AntFactory(int amount, Color color) {
 		ants = new ArrayList<Ant>();
-		int id = -1;
+		int id = 0;
 		for (int i=0; i<amount; i++) {
 			ants.add(new Ant(color, direction));
 		}

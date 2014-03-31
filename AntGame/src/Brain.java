@@ -17,10 +17,10 @@ public class Brain {
 	}
 	
 	/*
-	 * Return the requested instruction
+	 * Return the instruction at the given state
 	 * @return The next instruction
 	 */
-	public String getNextInstruction(int state) {
+	public String getState(int state) {
 		return instructions.get(state);
 	}
 	

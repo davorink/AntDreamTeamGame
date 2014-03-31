@@ -5,7 +5,6 @@ import java.awt.Point;
  * @author K Hutchings
  * @version 31/03/14
  */
-
 public class Ant {
 	private int id;
 	private Color color;
@@ -13,6 +12,7 @@ public class Ant {
 	private int resting;
 	private int direction;
 	private boolean hasFood;
+	private Brain brain;
 	
 	/**
 	 * Create the ant object
@@ -21,29 +21,38 @@ public class Ant {
 	 * @param food The amount of food particles the ant is carrying
 	 */
 	
-	public Ant(int id, Color color) {
+	public Ant(int ID, Color color) {
 		this.ID = ID;
 		this.color = color;
+		this.brain = GameEngine.getBrain(color);
 		this.state = 0;
 		this.resting = 0;
 		this.hasFood = false
 		this.direction = 0;
 	}
-	
+		
 	/**
-	 * Perform the action on the ant and cell
+	 * Get the instruction from the ants brain at its current state
 	 * @param instruction The instruction to act on
 	 */
-	public void doAction(String instruction) {
+	private String getInstruction(int state) {
+		return brain.getState(state);
+	}
+	
+	/**
+	 * Perform the action on the ant/cell
+	 */
+	public void doAction() {		
+		String instruction = getInstruction(state); //Get the instruction from the ants brain at its current state
 		World world = GameEngine.getWorld(); //Get the world from the static getter method in the game engine class
-		pos antPostion = world.find_ant(getID); //Get the ants position
+		pos antPostion = world.find_ant(ID); //Get the ants position
 		string action = instruction.substring(0, 2); //Read first two characters of instruction to determine which action it represents	
 		String[] splitInstruction = instruction.split("\\s+"); //Split the elements of the instruction	
 		switch (instruction) {
 			case action.equals("Se"):
 				senseDirection = splitInstruction[1]; //The direction to sense
 				pos sensePosition = senseCell(senseDirection, antPosition) //Get the postion of the cell to sense
-				if (cell_matches(sensePosition, splitInstruction[4], getColor())) { //See if the sensed position matches what is to be checked
+				if (cell_matches(sensePosition, splitInstruction[4], Color())) { //See if the sensed position matches what is to be checked
 					setState(splitInstruction[2]); //Set the state to 1st supplied state number
 				}
 				else {
@@ -51,10 +60,10 @@ public class Ant {
 				}
 				break;
 			case action.equals("Ma"):
-				world.set_marker_at(antPostion, getColor(), splitInstruction[1]); //Set the specified marker at the current ant cell
+				world.set_marker_at(antPostion, color, splitInstruction[1]); //Set the specified marker at the current ant cell
 				break;
 			case action.equals("Un"):
-				world.clear_marker_at(antPostion, getColor(), splitInstruction[1]); //Clear the specified marker at the current ant cell		
+				world.clear_marker_at(antPostion, color, splitInstruction[1]); //Clear the specified marker at the current ant cell		
 			}				
 				break;
 			case action.equals("Pi"):
@@ -74,12 +83,12 @@ public class Ant {
 				setState = splitInstruction[1]; //Set the state to the supplied state number
 				break;
 			case action.equals("Tu"):
-				setDirection(turn(ant.getDirection(), splitInstruction[1])); //Turn the ant in the direction specified
+				setDirection(turn(direction, splitInstruction[1])); //Turn the ant in the direction specified
 				setState = splitInstruction[2]; //Set the state to the supplied state number
 				break;
 			case action.equals("Mo"):
-				if (!some_ant_is_at(adjacentCell(antPosition, getDirection()))) { //See if an ant is ahead in the direction the ant is facing
-					world.set_ant_at(adjacentCell(antPosition, getDirection())) //Set the ant at the new position
+				if (!some_ant_is_at(adjacentCell(antPosition, direction))) { //See if an ant is ahead in the direction the ant is facing
+					world.set_ant_at(adjacentCell(antPosition, direction)) //Set the ant at the new position
 					world.clear_ant_at(antPosition) //Remove the ant from the current position
 					setState(splitInstruction[1]); //Set the state to 1st supplied state number
 				}
@@ -107,8 +116,7 @@ public class Ant {
 	 * @param halr the position to sense
 	 * @param currentXY The current position the ant is on
 	 * @return The position of the cell sensed
-	 */
-	
+	 */	
 	private static pos senseCell(String halr, pos currentXY) {
 		pos sensedXY;
 		if (halr.equals("Here") {
@@ -141,9 +149,6 @@ public class Ant {
 		}
 	}
 	
-}
-
-			
 	//Setters and getters for the ant's attributes
 	public void setResting(int resting) {
 		this.resting = resting;
