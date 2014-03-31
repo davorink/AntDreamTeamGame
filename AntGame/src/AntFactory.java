@@ -13,11 +13,11 @@ public class AntFactory {
 	 * @param amount The amount of ants to create
 	 * @param colour The colour the ant team is
 	 */
-	public AntFactory(int amount, String colour) {
+	public AntFactory(int amount, Color color) {
 		ants = new ArrayList<Ant>();
-		int id = -1;
+		int id = 0;
 		for (int i=0; i<amount; i++) {
-			ants.add(new Ant(colour, direction));
+			ants.add(new Ant(color, direction));
 		}
 	}
 	
