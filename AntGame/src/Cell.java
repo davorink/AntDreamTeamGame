@@ -7,8 +7,8 @@ public class Cell {
 	private cellType state;
 	private Ant ant;
 	private int foodAmount;
-	private marker redMarkers;
-	private marker blackMarkers;
+	private boolean[] redMarkers;
+	private boolean[] blackMarkers;
 
 	/**
 	 * Construct an object
@@ -20,8 +20,8 @@ public class Cell {
 		this.state = state;
 		this.ant = ant;
 		this.foodAmount = foodAmount;
-		redMarkers = new marker();
-		blackMarkers = new marker();
+		redMarkers = new boolean[6];
+		blackMarkers = new boolean[6];
 	}
 	
 	/**
@@ -62,5 +62,19 @@ public class Cell {
 	 */
 	public void setFoodAmount(int foodAmount) {
 		this.foodAmount = foodAmount;
+	}
+	
+	public void setMarker(color c, int marker, boolean newValue) {
+		if (c == RED) {
+			redMarkers[marker] = newValue;
+		} else if (c == BLACK) {
+			blackMarkers[marker] = newValue;
+		} else {
+			throw new Exception
+		}
+	}
+	
+	public boolean getMarker(color c, marker i) {
+		
 	}
 }
