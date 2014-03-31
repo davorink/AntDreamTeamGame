@@ -19,7 +19,6 @@ public class BrainEngine {
 	 */
 	public BrainEngine(String filePath) throws FileNotFoundException {
 		this.filePath = filePath;
-		brainID = 0;
 		parseBrain();
 	}
 	
@@ -42,21 +41,6 @@ public class BrainEngine {
 	public void setPath(String newPath) throws FileNotFoundException {
 		this.filePath = newPath;
 		parseBrain();
-	}
-	
-	/*
-	 * Increment the current brain id
-	 */
-	public void incrementCurrentBrainID() {
-		this.brainID++;
-	}
-	
-	/*
-	 * Return the current brain id
-	 * @return The current brain id
-	 */	
-	public int getCurrentBrainID() {
-		return this.brainID;
 	}
 	
 	/*

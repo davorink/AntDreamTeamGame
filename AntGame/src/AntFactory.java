@@ -3,23 +3,21 @@ import java.util.ArrayList;
 /*
  * A class to represent an ant factory
  * @author K Hutchings
- * @version 26/03/14
+ * @version 31/03/14
  */
 public class AntFactory {
 	ArrayList<Ant> ants;
 	
 	/*
-	 * Create a team of ants object with unique id's
+	 * Create a team of ants object with -1 as id (set in world)
 	 * @param amount The amount of ants to create
-	 * @param brainID The id of the brain the ant team it to use
 	 * @param colour The colour the ant team is
 	 */
-	public AntFactory(int amount, int brainID, Ant.Colour colour, int direction) {
+	public AntFactory(int amount, String colour) {
 		ants = new ArrayList<Ant>();
-		int id = 0;
+		int id = -1;
 		for (int i=0; i<amount; i++) {
-			ants.add(new Ant(id, brainID, colour, direction));
-			id++;
+			ants.add(new Ant(colour, direction));
 		}
 	}
 	
