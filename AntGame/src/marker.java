@@ -9,6 +9,9 @@ public class marker {
 		if(markers.length==6)this.markers = markers;
 		else throw new Exception("Marker length is wrong");
 	}
+	public marker(){
+		this.markers = new boolean[6];
+	}
 	public boolean[] getMarkers() {
 		return markers;
 	}
