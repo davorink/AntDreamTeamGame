@@ -64,17 +64,34 @@ public class Cell {
 		this.foodAmount = foodAmount;
 	}
 	
+	/**
+	 * Set a marker.
+	 * @param c Color of a marker; RED or BLACK
+	 * @param marker Array index
+	 * @param newValue New value of a marker
+	 */
 	public void setMarker(color c, int marker, boolean newValue) {
 		if (c == RED) {
 			redMarkers[marker] = newValue;
 		} else if (c == BLACK) {
 			blackMarkers[marker] = newValue;
 		} else {
-			throw new Exception
+			throw new Exception("At least one parameter is incorrect.");
 		}
 	}
 	
+	/**
+	 * Get a marker.
+	 * @param c Color of a marker; RED or BLACK
+	 * @param i Array index
+	 */
 	public boolean getMarker(color c, marker i) {
-		
+		if (c == RED) {
+			return redMarkers[i];
+		} else if (c == BLACK) {
+			return blackMarkers[i];
+		} else {
+			throw new Exception("At least one parameter is incorrect.");
+		}
 	}
 }
