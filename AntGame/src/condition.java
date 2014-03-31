@@ -4,7 +4,7 @@
  * @version 31/3/2014
  */
 public class condition {
-	Friend,             /* cell contains an ant of the same color */
+  Friend,             /* cell contains an ant of the same color */
   Foe,                /* cell contains an ant of the other color */
   FriendWithFood,     /* cell contains an ant of the same color carrying food */
   FoeWithFood,        /* cell contains an ant of the other color carrying food */

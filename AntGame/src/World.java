@@ -155,19 +155,38 @@ public class World {
 		return false;
 	}
 	
-
 	
 	
-	/*
-	public boolean cell_matches(pos p, condition cond, color c){
+	
+	
+	
+	public boolean cell_matches(pos p, String cond, color c){
 		
 		if(rocky(p)){
-			if(cond == condition.Rock){
+			if(cond.equals("Rock")){
 				return true;
 			}else{
 				return false;
 			}else{
-				
+				if(cond.equals("Friend")){
+					return some_ant_is_at(p) && ant_at(p).getColour() == c;
+				}else if(cond.equals("Foe")){
+					return some_ant_is_at(p) && ant_at(p).getColour() != c;
+				}else if(cond.equals("FriendWithFood")){
+					return some_ant_is_at(p) && ant_at(p).getColour() == c && ant_at(p).getHasFood();
+				}else if(cond.equals("FoeWithFood")){
+					return some_ant_is_at(p) && ant_at(p).getColour() != c && ant_at(p).getHasFood();
+				}else if(cond.equals("Food")){
+					return food_at(p)>0;
+				}else if(cond.equals("Rock")){
+					return false;
+				}else if(cond.substring(0, 7).equals("Marker(") && cond.endsWith(")")){
+					if(cond.charAt(7))
+				}else if(cond.equals("")){
+					
+				}else if(cond.equals("")){
+					
+				}else 
 				
 				
 				
@@ -175,24 +194,7 @@ public class World {
 			}
 		}
 		
-	if rocky(p) then
-	    if cond = Rock then true else false
-	else
-	    switch cond of
-	      case Friend:
-	        some_ant_is_at(p) &&
-	        color(ant_at(p)) = c
-	      case Foe:
-	        some_ant_is_at(p) &&
-	        color(ant_at(p)) <> c
-	      case FriendWithFood:
-	        some_ant_is_at(p) &&
-	        color(ant_at(p)) = c &&
-	        has_food(ant_at(p))
-	      case FoeWithFood:
-	        some_ant_is_at(p) &&
-	        color(ant_at(p)) <> c &&
-	        has_food(ant_at(p))
+
 	      case Food:
 	        food_at(p) > 0
 	      case Rock:
