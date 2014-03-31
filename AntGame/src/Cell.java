@@ -16,10 +16,10 @@ public class Cell {
 	 * @param ant Ant at cell.
 	 * @param foodAmount Amount of food at a cell. Can be between 
 	 */
-	public Cell(cellType state, Ant ant, int foodAmount) {
+	public Cell(cellType state, int foodAmount) {
 		this.state = state;
-		this.ant = ant;
 		this.foodAmount = foodAmount;
+		ant = null;
 		redMarkers = new boolean[6];
 		blackMarkers = new boolean[6];
 	}
