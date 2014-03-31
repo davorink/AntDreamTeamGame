@@ -5,5 +5,10 @@
  * @version 28/3/2014
  */
 public enum color {
-	RED, BLACK
+	RED, BLACK;
+	
+	public static color other_color(color c){
+		if(c == RED)return BLACK;
+		return RED;
+	}
 }

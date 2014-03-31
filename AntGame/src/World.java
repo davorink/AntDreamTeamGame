@@ -167,86 +167,108 @@ public class World {
 				return true;
 			}else{
 				return false;
-			}else{
-				if(cond.equals("Friend")){
-					return some_ant_is_at(p) && ant_at(p).getColour() == c;
-				}else if(cond.equals("Foe")){
-					return some_ant_is_at(p) && ant_at(p).getColour() != c;
-				}else if(cond.equals("FriendWithFood")){
-					return some_ant_is_at(p) && ant_at(p).getColour() == c && ant_at(p).getHasFood();
-				}else if(cond.equals("FoeWithFood")){
-					return some_ant_is_at(p) && ant_at(p).getColour() != c && ant_at(p).getHasFood();
-				}else if(cond.equals("Food")){
-					return food_at(p)>0;
-				}else if(cond.equals("Rock")){
-					return false;
-				}else if(cond.substring(0, 7).equals("Marker(") && cond.endsWith(")")){
-					if(cond.charAt(7))
-				}else if(cond.equals("")){
-					
-				}else if(cond.equals("")){
-					
-				}else 
-				
-				
-				
-				
 			}
 		}
+		else{
+			if(cond.equals("Friend")){
+				return some_ant_is_at(p) && ant_at(p).getColour() == c;
+			}else if(cond.equals("Foe")){
+				return some_ant_is_at(p) && ant_at(p).getColour() != c;
+			}else if(cond.equals("FriendWithFood")){
+				return some_ant_is_at(p) && ant_at(p).getColour() == c && ant_at(p).getHasFood();
+			}else if(cond.equals("FoeWithFood")){
+				return some_ant_is_at(p) && ant_at(p).getColour() != c && ant_at(p).getHasFood();
+			}else if(cond.equals("Food")){
+				return food_at(p)>0;
+			}else if(cond.equals("Rock")){
+				return false;
+			}else if(cond.substring(0, 7).equals("Marker(") && cond.endsWith(")")){
+				if(cond.charAt(7) >= '0' && cond.charAt(7) <= '5' ){
+					return check_marker_at(p, c, cond.charAt(7)-48);
+				}else{
+					throw new Exception("Error with Marker in cell_matches!");
+				}
+			}else if(cond.equals("FoeMarker")){
+				return check_any_marker_at(p, color.other_color(c));
+			}else if(cond.equals("Home")){
+				return anthill_at(p, c);
+			}else if(cond.equals("FoeHome")){
+				return anthill_at(p, color.other_color(c));
+			}
+		}
+		//Something went wrong.
+		throw new Exception("Something is wrong in cell_matches!");
+	}
 		
-
-	      case Food:
-	        food_at(p) > 0
-	      case Rock:
-	        false
-	      case Marker(i):
-	        check_marker_at(p, c, i)
-	      case FoeMarker:
-	        check_any_marker_at(p, other_color(c))
-	      case Home:
-	        anthill_at(p, c)
-	      case FoeHome:
-	        anthill_at(p, other_color(c))		
-		
+	
+	public int adjacent_ants(pos p, color c){
+		int n = 0;
+		for(int d = 0; d<=5; d++){
+			pos cel = adjacent_cell(p,d)
+			if(some_ant_is_at(cel) && ant_at(cel).getColour() == c)n++;
+		}
+		return n;
 	}
 	
 	
+	public void check_for_surrounded_ant_at(pos p){
+		if(some_ant_is_at(p)){
+			Ant a = ant_at(p);
+			if(adjacent_ants(p, color.otherColor(c)) >= 5){
+				kill_ant_at(p);
+				set_food_at(p, food_at(p)+3+ (int)a.getHasFood());
+			}
+		}
+	}
 	
-	/*
-	 The function cell_matches takes a position p, a condition cond, and a color c (the color of the ant that is doing the sensing), and checks whether cond holds at p.
+	public void check_for_surrounded_ants(pos p){
+		check_for_surrounded_ant_at(p);
+		for(int d = 0; d<=5; d++){
+			check_for_surrounded_ant_at(adjacent_cell(p,d));
+		}
+	}
+	
 
-function cell_matches(p:pos, cond:condition, c:color):bool =
-  if rocky(p) then
-    if cond = Rock then true else false
-  else
-    switch cond of
-      case Friend:
-        some_ant_is_at(p) &&
-        color(ant_at(p)) = c
-      case Foe:
-        some_ant_is_at(p) &&
-        color(ant_at(p)) <> c
-      case FriendWithFood:
-        some_ant_is_at(p) &&
-        color(ant_at(p)) = c &&
-        has_food(ant_at(p))
-      case FoeWithFood:
-        some_ant_is_at(p) &&
-        color(ant_at(p)) <> c &&
-        has_food(ant_at(p))
-      case Food:
-        food_at(p) > 0
-      case Rock:
-        false
-      case Marker(i):
-        check_marker_at(p, c, i)
-      case FoeMarker:
-        check_any_marker_at(p, other_color(c))
-      case Home:
-        anthill_at(p, c)
-      case FoeHome:
-        anthill_at(p, other_color(c))
-	 */
+	public pos adjacent_cell(pos p, int direction){
+		int x = p.getX();
+		int y = p.getY();
+		switch(d){
+		case 0:
+			x++;
+			break;
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			x--;
+			break;
+		case 4:
+			
+			break;
+		case 5:
+			
+			break;
+		default:
+			throw new Exception("Error in adjacent_cell!");
+		}
+		return new pos(x,y);
+	}
+	/*
+	function adjacent_cell(p:pos, d:dir):pos =
+			  let (x,y) = p in
+			  switch d of
+			    case 0: (x+1, y)
+			    case 1: if evenyes then (x, y+1) else (x+1, y+1)
+			    case 2: if evenyes then (x-1, y+1) else (x, y+1)
+			    case 3: (x-1, y)
+			    case 4: if evenyes then (x-1, y-1) else (x, y-1)
+			    case 5: if evenyes then (x, y-1) else (x+1, y-1)
+			    */
 	
-	
+	public Cell[][] getCells(){
+		return cells;
+	}
 }
