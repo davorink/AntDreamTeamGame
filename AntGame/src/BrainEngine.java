@@ -50,19 +50,34 @@ public class BrainEngine {
 	 */
 	
 	//*Need to check that the rest of the instruction is also valid
+	//*When creating brain from file to array - need to take out any lines with just spaces
 	public boolean checkBrainSyntax(ArrayList<String> list) {
-		String[] legalTokens = {"Sense", "Mark", "Unmark", "PickUp", "Drop", "Turn", "Move", "Flip"};
-		boolean validInstruction = false;
+		String legalTokens = "Sense Mark Unmark PickUp Drop Turn Move Flip";
+		stringlegalDirections = "Here Ahead LeftAhead RightAhead";
+		boolean validInstructions = false;
+		
 		for (int i=0; i<list.size(); i++) {
 			String line = list.get(i); //Check each instruction
 			String[] parts = line.split("\\s+"); //Split it into tokens by space
-			for (int j=0; j<legalTokens.length; j++) { //Check if the starter instruction token is valid
-				if (parts[0] == legalTokens[j]) {
-					validInstruction = true;
+			String Action = parts[0];
+			switch(action) {
+				case action.equals("Sense"):
+					if (parts.length == 5 && legalTokens.contains(parts[1] && parts.contains(parts[4])
+							&& (parts[2] >= 0 && parts[2] < )
+							) {
+						
+					}
+					break;
+					
+							
+					
+					
+					
+					validInstructions = true;
 				}
 			}				
 		}
-		return validInstruction;
+		return validInstructions;
 	}
 	
 	/*

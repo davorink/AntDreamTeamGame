@@ -46,9 +46,9 @@ public class Ant {
 		String instruction = getInstruction(state); //Get the instruction from the ants brain at its current state
 		World world = GameEngine.getWorld(); //Get the world from the static getter method in the game engine class
 		pos antPostion = world.find_ant(ID); //Get the ants position
-		string action = instruction.substring(0, 2); //Read first two characters of instruction to determine which action it represents	
 		String[] splitInstruction = instruction.split("\\s+"); //Split the elements of the instruction	
-		switch (instruction) {
+		string action = instruction.substring(0, 2); //Read first two characters of instruction to determine which action it represents	
+		switch (action) {
 			case action.equals("Se"):
 				senseDirection = splitInstruction[1]; //The direction to sense
 				pos sensePosition = senseCell(senseDirection, antPosition) //Get the postion of the cell to sense
