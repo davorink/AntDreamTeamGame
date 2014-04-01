@@ -5,6 +5,9 @@ import java.awt.Point;
  * @author K Hutchings
  * @version 31/03/14
  */
+
+// Test edit by Joe
+
 public class Ant {
 	private int id;
 	private Color color;
