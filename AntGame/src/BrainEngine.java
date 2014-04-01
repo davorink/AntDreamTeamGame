@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class BrainEngine {
 	private String filePath;
 	private ArrayList<String> list;
-	private int brainID;
 	
 	/**
 	 * Creates a brain engine object with a link to the file the brain is in

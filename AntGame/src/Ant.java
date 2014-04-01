@@ -80,6 +80,11 @@ public class Ant {
 			case action.equals("dr"):
 				if (hasFood) { //Make sure the ant has food
 					world.set_food_at(antPosition, world.foot_at(antPostion)+1); //Increase the food in the current ant position
+					if (world.anthill_at(antPosition, color)) { //Check to see if ant is dropping food on its ant hill
+						world.claimedFood(color) //Increment the food for the ants teams colour
+					}
+					//ClaimedFood method is not available yet in World
+					//!!!***What if the ant is dropping food on a rival anthill!!!***
 				}
 				state = Integer.parseInt(splitInstruction[1]); //Set the state to the supplied state number
 				break;
