@@ -6,6 +6,7 @@ public class World {
 	private Cell[][] cells;
 	private Ant[] ants;
 	
+	
 	/**
 	 * Constructor
 	 * @param cells 2D array of Cells to construct the world
@@ -237,25 +238,50 @@ public class World {
 			x++;
 			break;
 		case 1:
-			
+			if(y%2==0){
+				y++;
+			}else{
+				x++;
+				y++;
+			}
 			break;
 		case 2:
-			
+			if(y%2==0){
+				x--;
+				y++;
+			}else{
+				y++;
+			}
 			break;
 		case 3:
 			x--;
 			break;
 		case 4:
-			
+			if(y%2==0){
+				x--;
+				y--;
+			}else{
+				y--;
+			}
 			break;
 		case 5:
-			
+			if(y%2==0){
+				y--;
+			}else{
+				x++;
+				y-- ;
+			}
 			break;
 		default:
 			throw new Exception("Error in adjacent_cell!");
 		}
 		return new pos(x,y);
 	}
+	
+	public color anthillColorAt(pos p){
+		return cells[p.getX()][p.getY()].getAnthillColor();
+	}
+	
 	/*
 	function adjacent_cell(p:pos, d:dir):pos =
 			  let (x,y) = p in
