@@ -113,16 +113,20 @@ public class World {
 		return cells[p.getX()][p.getY()].getFoodAmount();
 	}
 	
-	
 	/**
 	 * Set the amount of food in the cell at position p
 	 * @param p Position of the cell
+	 * @param f The amount of food to set at the cell position
 	 */
-	public void set_food_at(pos p, int f){
+	public void setFoodAt(pos p, int f){
+		int currentFood = food_at(p);
 		cells[p.getX()][p.getY()].setFoodAmount(f);
+		if (world.hillColorAt(p) != null) { //If the ant is dropping food on an ant hill
+			f = f-currentFood; //Take away the food in the cell already accounted for
+			GameEngine.incClaimedFood(world.hillColorAt(p), f); //Increment the food for the ant hill teams colour by that amount
+		}	
 		//TODO: Should it be enforced that the amount of food is not negative?
 	}
-	
 
 	/**
 	 * Checks if the Cell contains an Ant.
