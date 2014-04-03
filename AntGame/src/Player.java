@@ -2,14 +2,14 @@ import java.util.ArrayList;
 
 /**
  * A class to represent a player
- * @author K Ratusznik
- * @version 01/04/2014
+ * @author K Ratusznik & K Hutchings
+ * @version 03/04/2014
  */
 
 public class Player {
 	private String name;
-	private color color;
-	private int winCounter;
+	private TeamColor color;
+	private int pointCounter;
 	private ArrayList<String> instructions;
 	
 	/**
@@ -17,11 +17,19 @@ public class Player {
 	 * @param name Player's name
 	 * @param color Player's color
 	 */
-	public Player(String name, color color, ArrayList<String> instructions) {
+	public Player(String name, ArrayList<String> instructions) {
 		this.name = name;
-		this.color = color;
+		this.color = null;
 		this.instructions = instructions;
 		winCounter = 0;
+	}
+	
+	/**
+	 * Return the instruction at the given state
+	 * @return The next instruction
+	 */
+	public String getState(int state) {
+		return instructions.get(state);
 	}
 
 	/**
@@ -44,7 +52,7 @@ public class Player {
 	 * Get colour.
 	 * @return player's colour
 	 */
-	public color getColour() {
+	public TeamColor getColour() {
 		return color;
 	}
 
@@ -52,16 +60,24 @@ public class Player {
 	 * Set colour. 
 	 * @param colour player's new colour
 	 */
-	public void setColor(color color) {
+	public void setColor(TeamColor color) {
 		this.color = color;
 	}
 
 	/**
-	 * Get win count.
-	 * @return number of won games
+	 * Get points
+	 * @return number of points won
 	 */
-	public int getWinCounter() {
+	public int getPoints() {
 		return winCounter;
+	}
+	
+	/**
+	 * Set points
+	 * @param number of points to increment by
+	 */
+	public int setPoints(int amount) {
+		this.points += amount;
 	}
 	
 	/**
