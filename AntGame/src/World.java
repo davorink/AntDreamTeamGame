@@ -6,7 +6,6 @@ public class World {
 	private Cell[][] cells;
 	private Ant[] ants;
 	
-	
 	/**
 	 * Constructor
 	 * @param cells 2D array of Cells to construct the world

@@ -1,7 +1,7 @@
 /**
  * A class to represent world engine
- * @author K Ratusznik
- * @version 01/04/2014
+ * @author K Ratusznik and D Kopic
+ * @version 03/04/2014
  */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -157,9 +157,62 @@ public class WorldEngine {
 	 */
 	
 	/**
-	 * Generate new world file.
+	 * Generate new world file and save it to the disk.
+	 * @return Path to the generated world's file
 	 */
-	public void generateNewWorldFile() {
+	public String generateNewWorldFile() {
+		
+		int size = 150;
+		char[][] cells = new char[size][size];
+		
+		
+		//Generate perimeter rocks and all other cells are clear.
+		for(int x = 0; x <= size; x++){
+			for(int y = 0; y <= size; y++){
+				if(x == 0 || x == size-1 || y==0 || y==size-1 ){
+					//Perimiter rocks
+					cells[x][y] = '#';
+				}else{
+					//All other cells
+					cells[x][y] = '.';
+				}
+			}	
+		}
+		
+		//Add Anthills
+
+		boolean validAnthills = false;
+		int posX1 = 0;
+		int posX2 = 0;
+		int posY1 = 0;
+		int posY2 = 0;
+		//Get valid top-left coordinates of the anthill-bounding box.
+		do{
+			posX1 = (int)(2+Math.random()*(150-22)); // 2 - 129
+			posY1 = (int)(2+Math.random()*(150-22)); // 2 - 129
+			
+			posX2 = (int)(2+Math.random()*(150-22)); // 2 - 129
+			posY2 = (int)(2+Math.random()*(150-22)); // 2 - 129
+			
+			//Calculate euclidean distance between the anthills
+			//If more than 28 then anthils are not touching.
+			if(Math.sqrt(Math.pow((posX1-posX2),2) + Math.pow((posY1-posY2),2))>28){
+				validAnthills = true;
+			}
+			
+		}while(validAnthill == false);
+		
+		
+		for(int x = 0; x<=18; x++){
+			for(int y = 0; y<=18;y++){
+				if(y-6<=0)cells[posX1+x][posY1+y]='Z';
+			}
+		}
+		
+
+		
+		
+		
 		try {
 			char[] line;
 			for (int i = 0; i < )
