@@ -1,21 +1,27 @@
+import java.util.ArrayList;
+
 /**
  * A class to represent a player
  * @author K Ratusznik
- * @version 31/03/2014
+ * @version 01/04/2014
  */
 
 public class Player {
 	private String name;
-	private String color;
+	private color color;
+	private int winCounter;
+	private ArrayList<String> instructions;
 	
 	/**
 	 * Construct an object
 	 * @param name Player's name
 	 * @param color Player's color
 	 */
-	public Player(String name, String color) {
+	public Player(String name, color color, ArrayList<String> instructions) {
 		this.name = name;
 		this.color = color;
+		this.instructions = instructions;
+		winCounter = 0;
 	}
 
 	/**
@@ -38,15 +44,31 @@ public class Player {
 	 * Get colour.
 	 * @return player's colour
 	 */
-	public Colour getColour() {
-		return colour;
+	public color getColour() {
+		return color;
 	}
 
 	/**
 	 * Set colour. 
 	 * @param colour player's new colour
 	 */
-	public void setColor(Colour colour) {
-		this.colour = colour;
+	public void setColor(color color) {
+		this.color = color;
+	}
+
+	/**
+	 * Get win count.
+	 * @return number of won games
+	 */
+	public int getWinCounter() {
+		return winCounter;
+	}
+	
+	/**
+	 * Return the instruction at the given state
+	 * @return The next instruction
+	 */
+	public String getState(int state) {
+		return instructions.get(state);
 	}
 }
