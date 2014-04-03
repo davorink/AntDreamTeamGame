@@ -3,6 +3,6 @@
  * @author Davorin Kopic
  * @version 28/3/2014
  */
-public enum cellType {
+public enum CellType {
 	CLEAR, ROCKY
 }
