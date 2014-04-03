@@ -3,7 +3,7 @@
  * @author Davorin Kopic
  * @version 31/3/2014
  */
-public class condition {
+public class Condition {
   Friend,             /* cell contains an ant of the same color */
   Foe,                /* cell contains an ant of the other color */
   FriendWithFood,     /* cell contains an ant of the same color carrying food */
