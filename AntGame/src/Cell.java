@@ -1,7 +1,7 @@
 /**
  * A class to represent a cell
  * @author K Ratusznik
- * @version 31/03/2014
+ * @version 01/04/2014
  */
 public class Cell {
 	private cellType state;
@@ -9,6 +9,7 @@ public class Cell {
 	private int foodAmount;
 	private boolean[] redMarkers;
 	private boolean[] blackMarkers;
+	private color anthill;
 
 	/**
 	 * Construct an object
@@ -16,19 +17,20 @@ public class Cell {
 	 * @param ant Ant at cell.
 	 * @param foodAmount Amount of food at a cell. Can be between 
 	 */
-	public Cell(cellType state, int foodAmount) {
+	public Cell(CellType state, int foodAmount) {
 		this.state = state;
 		this.foodAmount = foodAmount;
 		ant = null;
 		redMarkers = new boolean[6];
 		blackMarkers = new boolean[6];
+		anthill = null;
 	}
 	
 	/**
 	 * Get a state of a cell.
 	 * @return state of a cell: CLEAR or ROCKY
 	 */
-	public cellType getState() {
+	public CellType getState() {
 		return state;
 	}
 	
@@ -69,12 +71,13 @@ public class Cell {
 	 * @param c Color of a marker; RED or BLACK
 	 * @param marker Array index
 	 * @param newValue New value of a marker
+	 * @throws Exception 
 	 */
-	public void setMarker(color c, int marker, boolean newValue) {
-		if (c == RED) {
-			redMarkers[marker] = newValue;
-		} else if (c == BLACK) {
-			blackMarkers[marker] = newValue;
+	public void setMarker(color c, int index, boolean newValue) throws Exception {
+		if (c == color.RED) {
+			redMarkers[index] = newValue;
+		} else if (c == color.BLACK) {
+			blackMarkers[index] = newValue;
 		} else {
 			throw new Exception("At least one parameter is incorrect.");
 		}
@@ -84,14 +87,31 @@ public class Cell {
 	 * Get a marker.
 	 * @param c Color of a marker; RED or BLACK
 	 * @param i Array index
+	 * @throws Exception 
 	 */
-	public boolean getMarker(color c, marker i) {
-		if (c == RED) {
-			return redMarkers[i];
-		} else if (c == BLACK) {
-			return blackMarkers[i];
+	public boolean getMarker(color c, int index) throws Exception {
+		if (c == color.RED) {
+			return redMarkers[index];
+		} else if (c == color.BLACK) {
+			return blackMarkers[index];
 		} else {
 			throw new Exception("At least one parameter is incorrect.");
 		}
+	}
+	
+	/**
+	 * Get anthill color.
+	 * @return anthill color; RED or BLACK
+	 */
+	public color getAnthillColor() {
+		return anthill;
+	}
+	
+	/**
+	 * Set anthill color. RED or BLACK
+	 * @param c Color of an anthill
+	 */
+	public color setAnthillColor(color c) {
+		this.anthill = c;
 	}
 }
