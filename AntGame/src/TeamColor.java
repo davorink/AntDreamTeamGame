@@ -4,10 +4,10 @@
  * @author Davorin Kopic
  * @version 28/3/2014
  */
-public enum color {
+public enum TeamColor {
 	RED, BLACK;
 	
-	public static color other_color(color c){
+	public static TeamColor other_color(TeamColor c){
 		if(c == RED)return BLACK;
 		return RED;
 	}
