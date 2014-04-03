@@ -31,21 +31,6 @@ public class WorldEngine {
 		printWorld(world);
 	}
 	
-	public void printWorld(World w){
-		 Cell[][] cells = w.getCells();
-		 for(int r=0; r<WORLDSIZE; r++) {
-			 for(int c=0; c<WORLDSIZE; c++) {
-				System.out.print(cells[r][c]+" ");	
-			 }
-			 System.out.println("");
-		 }
-	}
-	
-	public static void main(String[] args) throws IOException {
-		file = "//smbhome.uscs.susx.ac.uk/kr210/Downloads/1.world.txt/";
-		WorldEngine pfrr = new WorldEngine(file);
-	}
-	
 	/**
 	 * Load world from a specified file. 
 	 * @param fname Name of file to load the world from
@@ -57,8 +42,9 @@ public class WorldEngine {
 		String line;
 		char curChar;
 		ArrayList<Ant> ants = new ArrayList<Ant>(); 
+		int rockCount = 14;
 		
-		try {
+		try { // Check if x and y values are correct
 			x = Integer.parseInt(bfr.readLine());
 			if (x != WORLDSIZE) throw new Exception("World's x dimention is not valid.");
 			y = Integer.parseInt(bfr.readLine());
@@ -70,7 +56,7 @@ public class WorldEngine {
 		grid = new Cell[x][y];
 		
 		try {
-			int antCounter = 0;	
+			int antCount = 0;	
 			int row = 0;
 			/* While there is a line to read */
 			while((line = bfr.readLine()) != null) {
@@ -88,23 +74,27 @@ public class WorldEngine {
 					switch (curChar) {
 						case '#':// rocky cell
 							grid[row][col] = new Cell(CellType.ROCKY, 0);
+							if (row != 0 || row != WORLDSIZE-1 || col != 0 || col != WORLDSIZE-1) {
+								rockCount -= 1;
+								if (rockCount < 0) throw new Exception("Limit reached! World must contain 14 rocks. (Excluding world's perimeters)");
+							}
 							break;
 						case '.':// clear cell
 							grid[row][col] = new Cell(CellType.CLEAR, 0);
 							break;
 						case '+':// red anthill
 							grid[row][col] = new Cell(CellType.CLEAR, 0);
-							Ant ant1 = new Ant(antCounter, color.RED);
+							Ant ant1 = new Ant(antCount, TeamColor.RED);
 							grid[row][col].setAnt(ant1);
 							ants.add(ant1);
-							antCounter += 1;
+							antCount += 1;
 							break;
 						case '-':// black anthill
 							grid[row][col] = new Cell(CellType.CLEAR, 0);
-							Ant ant2 = new Ant(antCounter, color.BLACK);
+							Ant ant2 = new Ant(antCount, TeamColor.BLACK);
 							grid[row][col].setAnt(ant2);
 							ants.add(ant2);
-							antCounter += 1;
+							antCount += 1;
 							break;
 						case '1':// 1 food particle
 							grid[row][col] = new Cell(CellType.CLEAR, 1);
@@ -149,90 +139,112 @@ public class WorldEngine {
 		} catch (Exception e) {
 			System.err.println("Caught Exception: Error when initializing a grid of cell objects.");
 		}		
+		if (rockCount > 0) throw new Exception("Limit not reached! World must contain 14 rocks to be valid. (Excluding world's perimeters)");
+		validateBlobsOfFood(grid);
+		validateRedAnthill(grid);
+		validateBlackAnthill(grid);
 		return new World(grid, ants.toArray());
 	}
 	
 	/**
-	 * Parse world.
+	 * Validate blobs of food in a world. 
+	 * - check that food blob consists off corect cells (cells of the same value)
+	 * - check that food blob is of size 5x5 cells
+	 * - check that there are 11 food blobs
+	 * @param grid A world to be checked 
 	 */
+	public void validateBlobsOfFood(Cell[][] grid) {
+		int foodBlobCount = 11;
+		for(int r = 0; r < WORLDSIZE; r++ ) {
+			for(int c = 0; c < WORLDSIZE; c++) {
+				if(grid[r][c] == '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9' ) {
+					for(int rr = r+1; rr < r+4; rr++) {
+						for(int cc = c+1; cc < c+4; cc++) {
+							if(grid[rr][cc] != grid[r][c]) throw new Exception("Blob of food has invalid cell(s).");
+						} // end: cc
+					} // end: rr
+					foodBlobCount -= 1;
+					if (foodBlobCount < 0) throw new Exception("Limit reached! World must contain 11 blobs of food.")
+				} // end: check if cell contains food particle
+			} // end: c
+		} // end: r
+		if(foodBlobCount > 0) throw new Exception("Limit not reached! World must contain 11 food blobs to be valid");
+	}
 	
 	/**
-	 * Generate new world file and save it to the disk.
-	 * @return Path to the generated world's file
+	 * Validate red anthill in a world. 
+	 * - check if dimentions are correct (hexagon with sides of length 7)
+	 * - check if red anthill consists of only red anthill cells 
+	 * - check there is only 1 red anthill in the world.
 	 */
-	public String generateNewWorldFile() {
-		
-		int size = 150;
-		char[][] cells = new char[size][size];
-		
-		
-		//Generate perimeter rocks and all other cells are clear.
-		for(int x = 0; x <= size; x++){
-			for(int y = 0; y <= size; y++){
-				if(x == 0 || x == size-1 || y==0 || y==size-1 ){
-					//Perimiter rocks
-					cells[x][y] = '#';
-				}else{
-					//All other cells
-					cells[x][y] = '.';
+	public void validateRedAnthill(Cell[][] grid) {
+		int redAnthillCount = 1;
+		for(int r = 0; r < WORLDSIZE; r++ ) {
+			for(int c = 0; c < WORLDSIZE; c++) {
+				for(int y = 0; y<=18; y++){
+					for(int x = 0; x<=18; x++) {
+						if(y<=12 && x+y>=6 && x-y<13 ){
+							//Top and centre of the anthill
+							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected red anthill cell but found other cell type.");
+						}else if(y>=12 && y-x <= 12 && x+y<=30){
+							//Bottom of the anthill
+							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected red anthill cell but found other cell type.");
+						}
+					}
+				} // end: check if a cell is a part of red anthill
+				if((redAnthillCount-1) < 0) {
+					throw new Exception("Limit reached! World must contain 1 red anthill.")
+				} else {
+					redAnthillCount -= 1;
 				}
-			}	
-		}
-		
-		//Add Anthills
-
-		boolean validAnthills = false;
-		int posX1 = 0;
-		int posX2 = 0;
-		int posY1 = 0;
-		int posY2 = 0;
-		//Get valid top-left coordinates of the anthill-bounding box.
-		do{
-			posX1 = (int)(2+Math.random()*(150-22)); // 2 - 129
-			posY1 = (int)(2+Math.random()*(150-22)); // 2 - 129
-			
-			posX2 = (int)(2+Math.random()*(150-22)); // 2 - 129
-			posY2 = (int)(2+Math.random()*(150-22)); // 2 - 129
-			
-			//Calculate euclidean distance between the anthills
-			//If more than 28 then anthils are not touching.
-			if(Math.sqrt(Math.pow((posX1-posX2),2) + Math.pow((posY1-posY2),2))>28){
-				validAnthills = true;
-			}
-			
-		}while(validAnthill == false);
-		
-		
-		for(int x = 0; x<=18; x++){
-			for(int y = 0; y<=18;y++){
-				if(y-6<=0)cells[posX1+x][posY1+y]='Z';
-			}
-		}
-		
-
-		
-		
-		
-		try {
-			char[] line;
-			for (int i = 0; i < )
-			String content = "This is the content to write into file";
-			 
-			File file = new File("C:/Users/Hexeasaurus/Desktop/test2.txt");
-	
-			// If file does not exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-	
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(content);
-			bw.close();
-	
-			System.out.println("New file has been created.");
-		} catch (IOException e) {
-			System.err.println("Caught IOException: Error when generating a world file.");
-		}
+			} // end: c
+		} // end: r
+		if (redAnthillCount > 0) throw new Exception("Limit not reached! World must contain 1 red anthill to be valid");
 	}
+
+	/**
+	 * Validate black anthill in a world. 
+	 * - check if dimentions are correct (hexagon with sides of length 7)
+	 * - check if black anthill consists of only black anthill cells 
+	 * - check there is only 1 black anthill in the world.
+	 */
+	public void validateBlackAnthill(Cell[][] grid) {
+		int blackAnthillCount = 1;
+		for(int r = 0; r < WORLDSIZE; r++ ) {
+			for(int c = 0; c < WORLDSIZE; c++) {
+				for(int y = 0; y<=18; y++){
+					for(int x = 0; x<=18; x++) {
+						if(y<=12 && x+y>=6 && x-y<13 ){
+							//Top and centre of the anthill
+							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected black anthill cell but found other cell type.");
+						}else if(y>=12 && y-x <= 12 && x+y<=30){
+							//Bottom of the anthill
+							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected black anthill cell but found other cell type.");
+						}
+					}
+				} // end: check if a cell is a part of black anthill
+				if((blackAnthillCount-1) < 0) {
+					throw new Exception("Limit reached! World must contain 1 black anthill.")
+				} else {
+					blackAnthillCount -= 1;
+				}
+			} // end: c
+		} // end: r
+		if (blackAnthillCount > 0) throw new Exception("Limit not reached! World must contain 1 black anthill to be valid");
+	}
+	
+	/**
+	 * Print world
+	 * @param w World to print
+	 */
+	public void printWorld(World w){
+		 Cell[][] grid = w.getCells();
+		 for(int r=0; r<WORLDSIZE; r++) {
+			 for(int c=0; c<WORLDSIZE; c++) {
+				System.out.print(grid[r][c]+" ");	
+			 }
+			 System.out.println("");
+		 }
+	}
+
 }
