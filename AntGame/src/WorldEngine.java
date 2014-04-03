@@ -246,5 +246,195 @@ public class WorldEngine {
 			 System.out.println("");
 		 }
 	}
+	
+	
+	/**
+	 * Generates and returns a valid new World file.
+	 * @return filename of the new world file
+	 */
+	public String generateNewWorldFile() {
+		char[][] cells = new char[WORLDSIZE][WORLDSIZE];
+		char[] anthillColors = {'+','-'};
+		int numFoodBlobs = 11;
+		int numRocks = 14;
+		
+		// *** Generate perimeter rocks and all other cells are clear.
+		for(int y = 0; y < WORLDSIZE; y++){
+			for(int x = 0; x < WORLDSIZE; x++){
+				if(y == 0 || y == WORLDSIZE-1 || x==0 || x==WORLDSIZE-1 ){
+					//Perimiter rocks
+					cells[y][x] = '#';
+				}else{
+					//All other cells
+					cells[y][x] = '.';
+				}
+			}	
+		}
+		
+		
+		
+		// *** Add Anthills
+		boolean validAnthills = true;
+		int[] posX = new int[anthillColors.length];
+		int[] posY = new int[anthillColors.length];
+
+		//Get valid top-left coordinates of the anthill-bounding box.
+		do{
+			for(int co = 0; co < anthillColors.length; co++){
+				posX[co] = (int)(2+Math.random()*(150-22)); // 2 - 129
+				posY[co] = (int)(2+Math.random()*(150-22)); // 2 - 129
+				
+			}
+			
+			validAnthills = true;
+			//Calculate euclidean distance between the anthills
+			//If more than 28 then anthils are not touching.
+			for(int c1 = 0; c1 < anthillColors.length; c1++){
+				for(int c2 = 0; c2 < anthillColors.length; c2++){
+					if(c1!=c2 && Math.sqrt(Math.pow((posX[c1]-posX[c2]),2) + Math.pow((posY[c1]-posY[c2]),2))<=28){
+						validAnthills = false;
+					}
+				}	
+			}
+		}while(validAnthills == false);
+		
+		//Draw anthills in the cells
+		for(int anthillColor = 0; anthillColor < anthillColors.length; anthillColor++){
+			for(int y = 0; y<=18; y++){
+				for(int x = 0; x<=18; x++){
+						if(y<=12 && x+y>=6 && x-y<13 ){
+							//Top and centre of the anthill
+							cells[posX[anthillColor]+x][posY[anthillColor]+y]=anthillColors[anthillColor];
+						}else if(y>=12 && y-x <= 12 && x+y<=30){
+							//Bottom of the anthill
+							cells[posX[anthillColor]+x][posY[anthillColor]+y]=anthillColors[anthillColor];
+						}
+				}
+			}
+		}
+		
+		
+		// *** Add blobs of food
+		boolean validBlobs = true;
+		int[] posXfood = new int[numFoodBlobs];
+		int[] posYfood = new int[numFoodBlobs];
+
+		//Get valid top-left coordinates of the food blobs.
+		do{
+			for(int co = 0; co < numFoodBlobs; co++){
+				posXfood[co] = (int)(2+Math.random()*(150-7)); // 2 - 144
+				posYfood[co] = (int)(2+Math.random()*(150-7)); // 2 - 144
+			}
+			validBlobs = true;
+			//Calculate euclidean distance between the food blobs
+			for(int c1 = 0; c1 < numFoodBlobs; c1++){
+				for(int c2 = 0; c2 < numFoodBlobs; c2++){
+					if(c1!=c2 && Math.sqrt(Math.pow((posXfood[c1]-posXfood[c2]),2) + Math.pow((posYfood[c1]-posYfood[c2]),2))<=7){
+						validBlobs = false;
+					}
+				}	
+			}
+			
+			//Calculate Euclidean distances between food blobs and anthills
+			for(int c1 = 0; c1 < numFoodBlobs; c1++){
+				for(int c2 = 0; c2 < anthillColors.length; c2++){
+					if(Math.sqrt(Math.pow((posXfood[c1]-posX[c2]),2) + Math.pow((posYfood[c1]-posY[c2]),2))<=28){
+						validBlobs = false;
+					}
+				}	
+			}
+			
+		}while(validBlobs == false);
+		
+		//Draw food blobs in the cells
+		for(int a = 0; a < numFoodBlobs; a++){
+			for(int y = 0; y<5; y++){
+				for(int x = 0; x<5; x++){
+					cells[posXfood[a]+x][posYfood[a]+y]='5';
+				}
+			}
+		}
+		
+		
+		
+		// *** Add Rocks
+		boolean validRocks = true;
+		int[] posXrock = new int[numRocks];
+		int[] posYrock = new int[numRocks];
+
+		//Get valid top-left coordinates of the rocks.
+		do{
+			for(int co = 0; co < numRocks; co++){
+				posXrock[co] = (int)(2+Math.random()*(150-3)); // 2 - 194
+				posYrock[co] = (int)(2+Math.random()*(150-3)); // 2 - 194
+			}
+			validRocks = true;
+			//Calculate euclidean distance between the rocks
+			for(int c1 = 0; c1 < numRocks; c1++){
+				for(int c2 = 0; c2 < numRocks; c2++){
+					if(c1!=c2 && Math.sqrt(Math.pow((posXrock[c1]-posXrock[c2]),2) + Math.pow((posYrock[c1]-posYrock[c2]),2))<=2){
+						validRocks = false;
+					}
+				}	
+			}
+			
+			//Calculate Euclidean distances between rocks and anthills
+			for(int c1 = 0; c1 < numRocks; c1++){
+				for(int c2 = 0; c2 < anthillColors.length; c2++){
+					if(Math.sqrt(Math.pow((posXrock[c1]-posX[c2]),2) + Math.pow((posYrock[c1]-posY[c2]),2))<=28){
+						validRocks = false;
+					}
+				}	
+			}
+			
+			//Calculate Euclidean distances between rocks and food
+			for(int c1 = 0; c1 < numRocks; c1++){
+				for(int c2 = 0; c2 < numFoodBlobs; c2++){
+					if(Math.sqrt(Math.pow((posXrock[c1]-posXfood[c2]),2) + Math.pow((posYrock[c1]-posYfood[c2]),2))<=7){
+						validBlobs = false;
+					}
+				}	
+			}
+			
+		}while(validRocks == false);
+		
+		//Draw rocks in the cells
+		for(int a = 0; a < numRocks; a++){
+			cells[posXrock[a]][posYrock[a]]='#';
+		}
+		
+		
+		// Actually write it to file
+		String nl = System.getProperty("line.separator");
+		StringBuffer worldStr = new StringBuffer();
+		worldStr.append(WORLDSIZE+nl+WORLDSIZE+nl);
+		for(int y = 0; y < WORLDSIZE; y++){
+			for(int x = 0; x < WORLDSIZE; x++){
+				worldStr.append(cells[x][y]+" ");
+			}	
+			worldStr.append(nl);
+		}
+		
+		try {
+			//TODO: Generate random filename!
+			File file = new File("E:/test2.txt");
+	
+			// If file does not exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+	
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(worldStr.toString());
+			bw.close();
+	
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		}
+		
+	}
+	
+	
 
 }
