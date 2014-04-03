@@ -3,8 +3,9 @@ import java.awt.Point;
 /**
  * A class to represent an ant
  * @author K Hutchings
- * @version 31/03/14
+ * @version 01/04/14
  */
+
 public class Ant {
 	private int id;
 	private Color color;
@@ -46,67 +47,72 @@ public class Ant {
 		String instruction = getInstruction(state); //Get the instruction from the ants brain at its current state
 		World world = GameEngine.getWorld(); //Get the world from the static getter method in the game engine class
 		pos antPostion = world.find_ant(ID); //Get the ants position
-		string action = instruction.substring(0, 2); //Read first two characters of instruction to determine which action it represents	
 		String[] splitInstruction = instruction.split("\\s+"); //Split the elements of the instruction	
-		switch (instruction) {
-			case action.equals("Se"):
+		string action = instruction.substring(0, 2); //Read first two characters of instruction to determine which action it represents	
+		switch (action) {
+			case action.equals("se"):
 				senseDirection = splitInstruction[1]; //The direction to sense
 				pos sensePosition = senseCell(senseDirection, antPosition) //Get the postion of the cell to sense
 				if (cell_matches(sensePosition, splitInstruction[4], Color())) { //See if the sensed position matches what is to be checked
-					setState(splitInstruction[2]); //Set the state to 1st supplied state number
+					state = Integer.parseInt(splitInstruction[2]); //Set the state to 1st supplied state number
 				}
 				else {
-					setState(splitInstruction[3]); //Otherwise set the state to 2nd supplied state number
+					state = Integer.parseInt(splitInstruction[3]); //Otherwise set the state to 2nd supplied state number
 				}
 				break;
-			case action.equals("Ma"):
+			case action.equals("ma"):
 				world.set_marker_at(antPostion, color, splitInstruction[1]); //Set the specified marker at the current ant cell
 				break;
-			case action.equals("Un"):
+			case action.equals("un"):
 				world.clear_marker_at(antPostion, color, splitInstruction[1]); //Clear the specified marker at the current ant cell		
 			}				
 				break;
-			case action.equals("Pi"):
+			case action.equals("pi"):
 				if (!hasFood && world.foot_at(antPostion) > 0) { //Make sure the ant has not already got food and theres food at the ants current position
 					world.set_food_at(antPosition, world.foot_at(antPostion)-1); //Reduce the food amount in the cell
-					setHasFood = true; //The ant now has food
-					setState = splitInstruction[1]; //Set the state to 1st supplied state number
+					hasFood = true; //The ant now has food
+					state = Integer.parseInt(splitInstruction[1]); //Set the state to 1st supplied state number
 				}
 				else {
-					setState = splitInstruction[2]; //Otherwise set the state to 2nd supplied state number
+					state = Integer.parseInt(splitInstruction[2]); //Otherwise set the state to 2nd supplied state number
 				}					
 				break;
-			case action.equals("Dr"):
+			case action.equals("dr"):
 				if (hasFood) { //Make sure the ant has food
 					world.set_food_at(antPosition, world.foot_at(antPostion)+1); //Increase the food in the current ant position
+					if (world.anthill_at(antPosition, color)) { //Check to see if ant is dropping food on its ant hill
+						world.claimedFood(color) //Increment the food for the ants teams colour
+					}
+					//ClaimedFood method is not available yet in World
+					//!!!***What if the ant is dropping food on a rival anthill!!!***
 				}
-				setState = splitInstruction[1]; //Set the state to the supplied state number
+				state = Integer.parseInt(splitInstruction[1]); //Set the state to the supplied state number
 				break;
-			case action.equals("Tu"):
-				setDirection(turn(direction, splitInstruction[1])); //Turn the ant in the direction specified
-				setState = splitInstruction[2]; //Set the state to the supplied state number
+			case action.equals("tu"):
+				direction = turn(direction, splitInstruction[1]); //Turn the ant in the direction specified
+				state = Integer.parseInt(splitInstruction[2]); //Set the state to the supplied state number
 				break;
-			case action.equals("Mo"):
-				if (!some_ant_is_at(adjacentCell(antPosition, direction))) { //See if an ant is ahead in the direction the ant is facing
+			case action.equals("mo"):
+				if (!some_ant_is_at(adjacentCell(antPosition, direction)) //See if an ant is ahead in the direction the ant is facing
+					&& !rocky(adjacentCell(antPosition, direction))) { //Also make sure ahead is not rocky
 					world.set_ant_at(adjacentCell(antPosition, direction)) //Set the ant at the new position
 					world.clear_ant_at(antPosition) //Remove the ant from the current position
-					setState(splitInstruction[1]); //Set the state to 1st supplied state number
+					state = Integer.parseInt(splitInstruction[1]); //Set the state to 1st supplied state number
 				}
 				else {
-					setState(splitInstruction[2]); //Otherwise set the state to 2nd supplied state number
+					state = Integer.parseInt(splitInstruction[2]); //Otherwise set the state to 2nd supplied state number
 				}
 				break;
-			case action.equals("Fl"):
-				randomNumber = gameEngine.randomInt(splitInstruction[1]); //Get the random number from the value supplied
+			case action.equals("fl"):
+				randomNumber = gameEngine.randomInt(Integer.parseInt(splitInstruction[1])); //Get the random number from the value supplied
 				if (randomNumber == 0) {
-					setState(splitInstruction[2]); //Set the state to 1st supplied state number
+					state = Integer.parseInt(splitInstruction[2]); //Set the state to 1st supplied state number
 				}
 				else {
-					setState(splitInstruction[3]); //Otherwise set the state to 2nd supplied state number
+					state = Integer.parseInt(splitInstruction[3]); //Otherwise set the state to 2nd supplied state number
 				}
 				break;
 			default:
-				System.out.println("Invalid instruction")
 				break;		
 		}
 	}
@@ -119,13 +125,13 @@ public class Ant {
 	 */	
 	private static pos senseCell(String halr, pos currentXY) {
 		pos sensedXY;
-		if (halr.equals("Here") {
+		if (halr.equals("here") {
 			return currentXY;
 		}
-		else if (halr.equals("Ahead") {			
+		else if (halr.equals("ahead") {			
 			return World.adjacentCell(currentXY, direction);
 		}
-		else if (halr.equals("LeftAhead") {
+		else if (halr.equals("leftahead") {
 			int senseDirection = (direction + 5) % 6;
 			return World.adjacentCell(currentXY, senseDirection);
 		}
@@ -141,7 +147,7 @@ public class Ant {
 	 * @return The direction turned
 	 */
 	private static int turn(int direction, String lr) {
-		if (lr.equals("Left")) {
+		if (lr.equals("left")) {
 			return (direction + 5) % 6;
 		}
 		else {
