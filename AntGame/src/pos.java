@@ -3,7 +3,7 @@
  * @author Davorin Kopic
  * @version 27/3/2014
  */
-public class pos {
+public class Pos {
 	private int x;
 	private int y;
 	
