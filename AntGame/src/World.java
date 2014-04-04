@@ -1,6 +1,6 @@
 /**
- * @author Davorin Kopic
- * @version 28/3/2014
+ * @author D Kopic
+ * @version 4/4/2014
  */
 public class World {
 	private Cell[][] cells;
@@ -87,7 +87,7 @@ public class World {
 		for(int x=0; x!=cells.length; x++){
 			for(int y=0; y!=cells[x].length; y++){
 				if(cells[x][y].getAnt() != null){
-					if(cells[x][y].getAnt().getID == id){
+					if(cells[x][y].getAnt().getID() == id){
 						return new Pos(x,y);
 					}
 				}

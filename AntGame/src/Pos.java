@@ -1,7 +1,7 @@
 /**
  * Represents a position in the World.
- * @author Davorin Kopic
- * @version 27/3/2014
+ * @author D Kopic
+ * @version 4/4/2014
  */
 public class Pos {
 	private int x;

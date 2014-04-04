@@ -20,8 +20,16 @@ public class Player {
 	public Player(String name, ArrayList<String> instructions) {
 		this.name = name;
 		this.color = null;
-		pointCounter = 0;
 		this.instructions = instructions;
+		pointCounter = 0;
+	}
+	
+	/**
+	 * Return the instruction at the given state
+	 * @return The next instruction
+	 */
+	public String getState(int state) {
+		return instructions.get(state);
 	}
 
 	/**
@@ -44,7 +52,7 @@ public class Player {
 	 * Get colour.
 	 * @return player's colour
 	 */
-	public TeamColor getColour() {
+	public TeamColor getColor() {
 		return color;
 	}
 
@@ -65,18 +73,11 @@ public class Player {
 	}
 	
 	/**
-	 * Set points
+	 * Add points
 	 * @param number of points to increment by
 	 */
-	public void setPoints(int amount) {
+	public void addPoints(int amount) {
 		this.pointCounter += amount;
 	}
-	
-	/**
-	 * Return the instruction at the given state
-	 * @return The next instruction
-	 */
-	public String getState(int state) {
-		return instructions.get(state);
-	}
+
 }

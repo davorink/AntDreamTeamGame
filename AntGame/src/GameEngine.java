@@ -1,4 +1,4 @@
-import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -6,120 +6,156 @@ import java.util.Map.Entry;
 /**
  * A class that manages games between players.
  * @author K King
- * @version 01/04/2014
+ * @version 04/04/2014 A
  */
 public class GameEngine {
 	
-	private WorldEngine worldEngine;
-	private int round;
-	private int roundInterval;
+	private static World matchWorld;
+	private static Player[] matchPlayers;
+	private static int claimedRedFood;
+	private static int claimedBlackFood;
+	private static WorldEngine worldEngine;
 	// TODO: Other classes can reference these constants from here.
-	public final int FRAMERATE = 30;
-	public final int WORLDSIZE = 150;
+	public static final int STEP_INTERVAL = 10;
+	public static final int FRAME_RATE = 30;
+	public static final int WORLD_SIZE = 150;
 	
 	public GameEngine () {
 		worldEngine = new WorldEngine();
-		round = 0;
-		// Time to sleep between rounds in milliseconds.
-		this.roundInterval = 10;
 	}
 	
-
-	public void runMatch(Player[] players, String[] worlds) {
-		// Player handling.
-		if (players.length == 2) {
-			// Set player colors.
-			players[0].setColor(Color.RED);
-			players[1].setColor(Color.BLACK);
+	/**
+	 * This method processes a single match between two players.
+	 * @param The two players for this match
+	 * @param The filename of the world to play this match on, the world will be randomly generated if this parameter is null
+	 */
+	public static void runOneVsOne(Player[] players, String worldFile) {
+		// Define the players for this match.
+		matchPlayers = new Player[2];
+		matchPlayers[0] = players[0];
+		matchPlayers[1] = players[1];
+		// Define the player colours for this match.
+		matchPlayers[0].setColor(TeamColor.RED);
+		matchPlayers[1].setColor(TeamColor.BLACK);
+		// Randomly generate a world if one was not provided.
+		if (worldFile == null) worldFile = worldEngine.generateNewWorldFile();
+		// Load the world.
+		matchWorld = worldEngine.loadWorld(worldFile);
+		// Play the match.
+		processMatch();
+		// Determine the winning player.
+		if (claimedFoodParticles(matchPlayers[0].getColor()) > claimedFoodParticles(matchPlayers[1].getColor())) {
+			// The first player wins.
+			// JOE~ GUI.endGame(matchPlayers[0]);
+		} else if (claimedFoodParticles(matchPlayers[1].getColor()) > claimedFoodParticles(matchPlayers[0].getColor())) {
+			// The second player wins.
+			// JOE~ GUI.endGame(matchPlayers[1]);
 		} else {
-			// TODO: Parameter error, two players must be supplied.
-		}
-		// World handling.
-		World[] matchWorlds = new World[3];
-		if (worlds == null) {
-			// Generate three worlds because none were supplied.
-			for (int worldNumber=0; worldNumber<3; worldNumber++) {
-				matchWorlds[worldNumber] = worldEngine.generateWorld();
-			}
-		} else if (worlds.length == 3) {
-			// Load the three supplied world files.
-			for (int worldNumber=0; worldNumber<3; worldNumber++) {
-				// TODO: These need to validated when selected in GUI.
-				matchWorlds[worldNumber] = worldEngine.loadWorld(worlds[worldNumber]);
-			}
-		} else {
-			// TODO: Parameter error, three worlds must be supplied or be null.
-		}
-		// Play up to three games between the two supplied players.
-		int redWinCount = 0;
-		int blackWinCount = 0;
-		Color gameWinner;
-		gameloop:
-		for (int gameNumber=0; gameNumber<3; gameNumber++) {
-			// Run this game.
-			gameWinner = processRounds();
-			// Increase the win count for the winner of this game round.
-			playerloop:
-			for (Player player : players) {
-				if (player.getColor() == gameWinner) {
-					player.incrementWinCount();
-					if (player.getWinCount() >= 2) {
-						// This player wins if two or more games have been won.
-						GUI.endMatch(player);
-						// End this class.
-						break gameloop;
-					} else {
-						// Display the winner for this game of the match.
-						GUI.displayGameWinner(player);
-					}
-					// We don't need to continue this loop, there can only be one winner per game round.
-					break playerloop;
-				}
-			}
-			// TODO: Swap player colors.
-			// Reset game round.
-			// Change world.
+			// Both players draw.
+			// JOE~ GUI.endGame(null);
 		}
 	}
 	
 	/**
-	 * Incrementally process each round for the current game.
-	 * @return The color of the winning team
+	 * This method processes a tournament between any number of players.
+	 * @param The players to be included in the tournament
 	 */
-	public Color processRounds() {
-		// Execute 300,000 rounds.
-		while (round < 300000) {
+	public static void runTournament(Player[] players) {
+		
+		// Generate three worlds for this tournament.
+		String[] tournamentWorlds = new String[3];
+		for (int index=0; index<3; index++) {
+			tournamentWorlds[index] = worldEngine.generateNewWorldFile();
+		}
+		
+		// Match each player against every other player.
+		for (int A=0; A<players.length-1; A++) {
+			for (int B=A+1; B<players.length; B++) {
+				// Define the pairing of players for this match.
+				matchPlayers = new Player[2];
+				matchPlayers[0] = players[A];
+				matchPlayers[1] = players[B];
+				// Play this pairing of players on each of the tournament worlds.
+				for (int worldIndex=0; worldIndex<tournamentWorlds.length; worldIndex++) {
+					// Load the current tournament world.
+					matchWorld = worldEngine.loadWorld(tournamentWorlds[worldIndex]);
+					// Play the first match between this pairing of players.
+					matchPlayers[0].setColor(TeamColor.RED);
+					matchPlayers[1].setColor(TeamColor.BLACK);
+					processMatch();
+					updatePoints();
+					// Reset the current tournament world.
+					matchWorld = worldEngine.loadWorld(tournamentWorlds[worldIndex]);
+					// Play the second match between this pairing of players.
+					matchPlayers[0].setColor(TeamColor.RED);
+					matchPlayers[1].setColor(TeamColor.BLACK);
+					processMatch();
+					updatePoints();
+				}
+			}
+		}
+		
+		// Determine the winning player.
+		Player winningPlayer = players[0];
+		for (Player player : matchPlayers) {
+			if (player.getPoints() > winningPlayer.getPoints()) {
+				winningPlayer = player;
+			}
+		}
+		
+		// The game has finished, present the winner through the GUI.
+		// JOE~ GUI.endGame(winningPlayer);
+		
+	}	
+	
+	/**
+	 * This method determines the winner of the current match and updates the points accordingly.
+	 */
+	private static void updatePoints() {
+		if (claimedFoodParticles(matchPlayers[0].getColor()) > claimedFoodParticles(matchPlayers[1].getColor())) {
+			// The first player wins.
+			matchPlayers[0].addPoints(2);
+		} else if (claimedFoodParticles(matchPlayers[1].getColor()) > claimedFoodParticles(matchPlayers[0].getColor())) {
+			// The second player wins.
+			matchPlayers[1].addPoints(2);
+		} else {
+			// Both players draw.
+			matchPlayers[0].addPoints(1);
+			matchPlayers[1].addPoints(1);
+		}
+	}
+	
+	/**
+	 * Incrementally process each step for a match.
+	 */
+	private static TeamColor processMatch() {
+		// Execute 300,000 steps.
+		for (int stepCount=0; stepCount<300000; stepCount++) {
 			// Loop through each ant according to ID.
-			for (Ant ant : world.ants) {
+			for (Ant ant : matchWorld.getAnts()) {
 				// Process the action for this ant.
 				ant.doAction();
 			}
 			// Check for surrounded ants.
-			for (int x = 0; x < WORLDSIZE; x++) {
-				for (int y = 0; y < WORLDSIZE; y++) {
-					world.check_for_surrounded_ants(new pos(x, y));
+			for (int x = 0; x < WORLD_SIZE; x++) {
+				for (int y = 0; y < WORLD_SIZE; y++) {
+					matchWorld.check_for_surrounded_ants(new pos(x, y));
 				}
 			}
 			// Return a winner if either player has no remaining ants.
-			if (countAnts(Color.RED) == 0) return Color.RED;
-			if (countAnts(Color.BLACK) == 0) return Color.BLACK;
+			if (countAnts(TeamColor.RED) == 0) return TeamColor.RED;
+			if (countAnts(TeamColor.BLACK) == 0) return TeamColor.BLACK;
 			// Update the GUI.
 			// TODO: We could just include parameter of the world, and transfer these methods to world so that they can be called from the GUI.
-			GUI.roundUpdate(world.getCells(), world.getAnts(), round, countAnts(Color.RED), countAnts(Color.BLACK), countFoodParticles(Color.RED), countFoodParticles(Color.BLACK));
-			// Increment the round counter.
-			round++;
-			// Sleep before executing the next round.
+			// JOE~ GUI.stepUpdate(matchWorld.getCells(), matchWorld.getAnts(), stepCount, countAnts(TeamColor.RED), countAnts(TeamColor.BLACK), claimedFoodParticles(TeamColor.RED), claimedFoodParticles(TeamColor.BLACK));
+			// Increment the step counter.
+			stepCount++;
+			// Sleep before executing the next step.
 			try {
-				Thread.sleep(roundInterval);
+				Thread.sleep(STEP_INTERVAL);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-		// The game has ended, return the winning player.
-		if (countFoodParticles(Color.RED) > countFoodParticles(Color.BLACK)) {
-			return Color.RED;
-		} else {
-			return Color.BLACK;
 		}
 	}
 	
@@ -127,18 +163,28 @@ public class GameEngine {
 	 * Return the number of food particles claimed by a specified player.
 	 * @return Number of food particles
 	 */
-	private int countFoodParticles(Color color) {
-		// TODO: Cell must contain anthill state as ENUM color or null.
-		return 0;
+	private static int claimedFoodParticles(TeamColor color) {
+		if (color == TeamColor.RED) return claimedRedFood;
+		return claimedBlackFood;
+	}
+	
+	/**
+	 * This method increments the food claimed by a particular player.
+	 * @param The colour of the team that has claimed food
+	 * @param The amount of claimed food
+	 */
+	public static void incClaimedFood(TeamColor color, int amount) {
+		if (color == TeamColor.RED) claimedRedFood += amount;
+		if (color == TeamColor.BLACK) claimedBlackFood += amount;
 	}
 	
 	/**
 	 * Return the number of remaining ants of a specified player.
 	 * @return Number of ants
 	 */
-	private int countAnts(Color color) {
+	private static int countAnts(TeamColor color) {
 		int count = 0;
-		for (Ant ant : world.getAnts()) {
+		for (Ant ant : matchWorld.getAnts()) {
 			if (ant.getColor() == color) count++;
 		}
 		return count;
@@ -148,8 +194,22 @@ public class GameEngine {
 	 * Return the world for the current game.
 	 * @return The world
 	 */
-	public World getWorld() {
-		return world;
+	public static World getWorld() {
+		return matchWorld;
+	}
+	
+	/**
+	 * Return the player of a specified colour in the active match.
+	 * @param The colour of the player to return
+	 */
+	public static Player getPlayer(TeamColor color) {
+		for (Player player : matchPlayers) {
+			if (player.getColor() == color) {
+				return player;
+			}
+		}
+		// No player of the specified colour was found, this situation should never happen.
+		return null;
 	}
 	
 	/**

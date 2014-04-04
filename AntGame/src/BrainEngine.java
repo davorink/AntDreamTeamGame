@@ -18,7 +18,7 @@ public class BrainEngine {
 	 * Creates a brain engine object with a link to the file the brain is in
 	 * @param filePath The path of the brain file
 	 */
-	public BrainEngine(String filePath) throws FileNotFoundException {
+	public BrainEngine(String filePath) throws FileNotFoundException, InvalidInstruction, TooManyInstructions {
 		this.filePath = filePath;
 		Scanner s = new Scanner(new File(filePath));
 		int lineAmount = 0;
@@ -31,7 +31,7 @@ public class BrainEngine {
 	/**
 	 * Parse the file into a list of brain instructions
 	 */
-	public void parseBrain() throws FileNotFoundException {
+	public void parseBrain() throws FileNotFoundException, InvalidInstruction, TooManyInstructions {
 		Scanner s = new Scanner(new File(filePath));
 		int lineAmount = 0;
 		while (s.hasNext()) { //Get the amount of instructions in the file
@@ -45,10 +45,10 @@ public class BrainEngine {
 				this.list.add(instruction.toLowerCase()); //Add it to the array list (in lowercase)
 			}
 			else {
-				throw new InvalidInstruction("Invalid instruction!")
+				throw new InvalidInstruction("Invalid instruction!");
 			}
 		}
-		if (list.size > 10000 || list.size == 0) { //Make sure brain not too big
+		if (list.size() > 10000 || list.size() == 0) { //Make sure brain not too big
 			throw new TooManyInstructions("Too many instructions!");
 		}
 		s.close();
@@ -58,7 +58,7 @@ public class BrainEngine {
 	 * Change the file path for the brain engine object and parse a new brain
 	 * @param newPath The new file path
 	 */	
-	public void setPath(String newPath) throws FileNotFoundException {
+	public void setPath(String newPath) throws FileNotFoundException, InvalidInstruction, TooManyInstructions {
 		this.filePath = newPath;
 		parseBrain();
 	}
@@ -75,12 +75,12 @@ public class BrainEngine {
 		String legalTurns = "left right";
 		boolean validInstruction = false;
 		String[] instructionParts = instruction.split("\\s+"); //Split it into tokens by space
-		String Action = parts[0]; //Check what the action is
+		String action = instructionParts[0]; //Check what the action is
 		switch(action) {
-			case action.equals("sense"):
+			case("sense"):
 				if (instructionParts.length >= 5) { //Make sure sense instruction is valid
 					if (legalDirections.contains(instructionParts[1]) && legalConditions.contains(instructionParts[4]) //Make sure all relevant elements are correct
-						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount;
+						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount
 						&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount) {
 						if (instructionParts[4].equals("marker") && instructionParts.length >= 6 //If its a marker condition, check the marker no
 							&& Integer.parseInt(instructionParts[5]) >= 0  && Integer.parseInt(instructionParts[5]) < 6) {
@@ -92,52 +92,52 @@ public class BrainEngine {
 					}						
 				}
 				break;
-			case action.equals("move"):
-			case action.equals("pickup"):
+			case("move"):
+			case("pickup"):
 				if (instructionParts.length >= 3) {  //Make sure sense move & pickup instructions are valid
 					if (Integer.parseInt(instructionParts[1]) < lineAmount && Integer.parseInt(instructionParts[2]) < lineAmount) {
 						validInstruction = true;
 					}
 				}
 				break;
-			case action.equals("mark"):
-			case action.equals("unmark"):
+			case("mark"):
+			case("unmark"):
 				if  (instructionParts.length >= 3) {  //Make sure sense mark & unmark instructions are valid
-					if (Integer.parseInt(instructionParts[1]) >= 0  && Integer.parseInt(instructionParts[1]) < 6)
+					if (Integer.parseInt(instructionParts[1]) >= 0  && Integer.parseInt(instructionParts[1]) < 6
 						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount){
 						validInstruction = true;
 					}
 				}
 				break;
-			case action.equals("drop"):
+			case("drop"):
 				if  (instructionParts.length >= 2) { //Make sure drop instruction is valid
 					if (Integer.parseInt(instructionParts[1]) < lineAmount) {
 						validInstruction = true;
 					}
 				}
 				break;
-			}
-			case action.equals("turn"):
+			case("turn"):
 				if (instructionParts.length >= 3) { //Make sure turn instruction is valid
 					if (legalTurns.contains(instructionParts[1]) && Integer.parseInt(instructionParts[2]) < lineAmount) {
 						validInstruction = true;
 					}
 				}
 				break;
-			case action.equals("flip"):
+			case("flip"):
 				if (instructionParts.length >= 4) { //Make sure flip instruction is valid
-					if (instructionParts[1].matches("\\d+") { //Make sure the 2nd elemet contains at least one digit
+					if (instructionParts[1].matches("\\d+") //Make sure the 2nd element contains at least one digit
 						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount
-						&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount)
+						&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount) {
 						validInstruction = true;						
 					}
 				}
 				break;
 			default:
 				break;
-		}				
+		}
 		return validInstruction;
 	}
+
 	
 	/**
 	 * Return a list of the parsed brain instructions
