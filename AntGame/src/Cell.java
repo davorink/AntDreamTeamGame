@@ -4,12 +4,12 @@
  * @version 01/04/2014
  */
 public class Cell {
-	private cellType state;
+	private CellType state;
 	private Ant ant;
 	private int foodAmount;
 	private boolean[] redMarkers;
 	private boolean[] blackMarkers;
-	private color anthill;
+	private TeamColor anthill;
 
 	/**
 	 * Construct an object
@@ -73,10 +73,10 @@ public class Cell {
 	 * @param newValue New value of a marker
 	 * @throws Exception 
 	 */
-	public void setMarker(color c, int index, boolean newValue) throws Exception {
-		if (c == color.RED) {
+	public void setMarker(TeamColor c, int index, boolean newValue) throws Exception {
+		if (c == TeamColor.RED) {
 			redMarkers[index] = newValue;
-		} else if (c == color.BLACK) {
+		} else if (c == TeamColor.BLACK) {
 			blackMarkers[index] = newValue;
 		} else {
 			throw new Exception("At least one parameter is incorrect.");
@@ -89,10 +89,10 @@ public class Cell {
 	 * @param i Array index
 	 * @throws Exception 
 	 */
-	public boolean getMarker(color c, int index) throws Exception {
-		if (c == color.RED) {
+	public boolean getMarker(TeamColor c, int index) throws Exception {
+		if (c == TeamColor.RED) {
 			return redMarkers[index];
-		} else if (c == color.BLACK) {
+		} else if (c == TeamColor.BLACK) {
 			return blackMarkers[index];
 		} else {
 			throw new Exception("At least one parameter is incorrect.");
@@ -100,18 +100,18 @@ public class Cell {
 	}
 	
 	/**
-	 * Get anthill color.
-	 * @return anthill color; RED or BLACK
+	 * Get anthill TeamColor.
+	 * @return anthill TeamColor; RED or BLACK
 	 */
-	public color getAnthillColor() {
+	public TeamColor getAnthillColor() {
 		return anthill;
 	}
 	
 	/**
-	 * Set anthill color. RED or BLACK
+	 * Set anthill TeamColor. RED or BLACK
 	 * @param c Color of an anthill
 	 */
-	public color setAnthillColor(color c) {
+	public void setAnthillColor(TeamColor c) {
 		this.anthill = c;
 	}
 }

@@ -24,19 +24,17 @@ public class WorldEngine {
 	
 	/**
 	 * Default constructor.
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public WorldEngine(String fname) throws IOException{	
-		world = loadWorld(fname);
-		printWorld(world);
+	public WorldEngine() {	
 	}
 	
 	/**
 	 * Load world from a specified file. 
 	 * @param fname Name of file to load the world from
-	 * @throws IOException
+	 * @throws Exception 
 	 */
-	public World loadWorld(String fname) throws IOException {
+	public World loadWorld(String fname) throws Exception {
 		FileReader fr = new FileReader(fname);
 		bfr = new BufferedReader(fr);
 		String line;
@@ -143,7 +141,7 @@ public class WorldEngine {
 		validateBlobsOfFood(grid);
 		validateRedAnthill(grid);
 		validateBlackAnthill(grid);
-		return new World(grid, ants.toArray());
+		return new World(grid, (Ant[]) ants.toArray());
 	}
 	
 	/**
@@ -157,18 +155,21 @@ public class WorldEngine {
 		int foodBlobCount = 11;
 		for(int r = 0; r < WORLDSIZE; r++ ) {
 			for(int c = 0; c < WORLDSIZE; c++) {
-				if(grid[r][c] == '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9' ) {
+				if(grid[r][c].getFoodAmount() > 0) {
 					for(int rr = r+1; rr < r+4; rr++) {
 						for(int cc = c+1; cc < c+4; cc++) {
-							if(grid[rr][cc] != grid[r][c]) throw new Exception("Blob of food has invalid cell(s).");
-						} // end: cc
+							if(grid[rr][cc] != grid[r][c]) // throw new Exception("Blob of food has invalid cell(s).");
+								System.out.println("Blob of food has invalid cell(s).");
+							} // end: cc
 					} // end: rr
 					foodBlobCount -= 1;
-					if (foodBlobCount < 0) throw new Exception("Limit reached! World must contain 11 blobs of food.")
+					if (foodBlobCount < 0) // throw new Exception("Limit reached! World must contain 11 blobs of food.");
+					System.out.println("Limit reached! World must contain 11 blobs of food.");
 				} // end: check if cell contains food particle
 			} // end: c
 		} // end: r
-		if(foodBlobCount > 0) throw new Exception("Limit not reached! World must contain 11 food blobs to be valid");
+		if(foodBlobCount > 0) // throw new Exception("Limit not reached! World must contain 11 food blobs to be valid");
+			System.out.println("Limit not reached! World must contain 11 food blobs to be valid");
 	}
 	
 	/**
@@ -181,25 +182,33 @@ public class WorldEngine {
 		int redAnthillCount = 1;
 		for(int r = 0; r < WORLDSIZE; r++ ) {
 			for(int c = 0; c < WORLDSIZE; c++) {
-				for(int y = 0; y<=18; y++){
-					for(int x = 0; x<=18; x++) {
-						if(y<=12 && x+y>=6 && x-y<13 ){
-							//Top and centre of the anthill
-							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected red anthill cell but found other cell type.");
-						}else if(y>=12 && y-x <= 12 && x+y<=30){
-							//Bottom of the anthill
-							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected red anthill cell but found other cell type.");
+				if(grid[r][c].getAnthillColor() == TeamColor.RED) {
+					int boundingBoxX = r;
+					int boundingBoxY = c-6;
+					for(int y = 0; y<=18; y++){
+						for(int x = 0; x<=18; x++) {
+							if(y<=12 && x+y>=6 && x-y<13 ){
+								//Top and centre of the anthill
+								if(grid[boundingBoxX+x][boundingBoxY+y].getAnthillColor() != TeamColor.RED) // throw new Exception("Expected red anthill cell but found other cell type.");
+									System.out.println("Expected red anthill cell but found other cell type.");
+							}else if(y>=12 && y-x <= 12 && x+y<=30){
+								//Bottom of the anthill
+								if(grid[boundingBoxX+x][boundingBoxY+y].getAnthillColor() != TeamColor.RED) // throw new Exception("Expected red anthill cell but found other cell type.");
+									System.out.println("Expected red anthill cell but found other cell type.");
+							}
 						}
-					}
-				} // end: check if a cell is a part of red anthill
+					} // end: check if a cell is a part of red anthill
+				}
 				if((redAnthillCount-1) < 0) {
-					throw new Exception("Limit reached! World must contain 1 red anthill.")
+					// throw new Exception("Limit reached! World must contain 1 red anthill.")
+					System.out.println("Limit reached! World must contain 1 red anthill.");
 				} else {
 					redAnthillCount -= 1;
 				}
 			} // end: c
 		} // end: r
-		if (redAnthillCount > 0) throw new Exception("Limit not reached! World must contain 1 red anthill to be valid");
+		if (redAnthillCount > 0) // throw new Exception("Limit not reached! World must contain 1 red anthill to be valid");
+			System.out.println("Limit not reached! World must contain 1 red anthill to be valid");
 	}
 
 	/**
@@ -212,25 +221,33 @@ public class WorldEngine {
 		int blackAnthillCount = 1;
 		for(int r = 0; r < WORLDSIZE; r++ ) {
 			for(int c = 0; c < WORLDSIZE; c++) {
-				for(int y = 0; y<=18; y++){
-					for(int x = 0; x<=18; x++) {
-						if(y<=12 && x+y>=6 && x-y<13 ){
-							//Top and centre of the anthill
-							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected black anthill cell but found other cell type.");
-						}else if(y>=12 && y-x <= 12 && x+y<=30){
-							//Bottom of the anthill
-							if(grid[posX[0]+x][posY[0]+y] != '+') throw new Exception("Expected black anthill cell but found other cell type.");
+				if(grid[r][c].getAnthillColor() == TeamColor.BLACK) {
+					int boundingBoxX = r;
+					int boundingBoxY = c-6;
+					for(int y = 0; y<=18; y++){
+						for(int x = 0; x<=18; x++) {
+							if(y<=12 && x+y>=6 && x-y<13 ){
+								//Top and centre of the anthill
+								if(grid[boundingBoxX+x][boundingBoxY+y].getAnthillColor() != TeamColor.BLACK) // throw new Exception("Expected black anthill cell but found other cell type.");
+									System.out.println("Expected black anthill cell but found other cell type.");
+							}else if(y>=12 && y-x <= 12 && x+y<=30){
+								//Bottom of the anthill
+								if(grid[boundingBoxX+x][boundingBoxY+y].getAnthillColor() != TeamColor.BLACK) // throw new Exception("Expected black anthill cell but found other cell type.");
+									System.out.println("Expected black anthill cell but found other cell type.");
+							}
 						}
-					}
-				} // end: check if a cell is a part of black anthill
+					} // end: check if a cell is a part of black anthill
+				}
 				if((blackAnthillCount-1) < 0) {
-					throw new Exception("Limit reached! World must contain 1 black anthill.")
+					// throw new Exception("Limit reached! World must contain 1 black anthill.");
+					System.out.println("Limit reached! World must contain 1 black anthill.");
 				} else {
 					blackAnthillCount -= 1;
 				}
 			} // end: c
 		} // end: r
-		if (blackAnthillCount > 0) throw new Exception("Limit not reached! World must contain 1 black anthill to be valid");
+		if (blackAnthillCount > 0) // throw new Exception("Limit not reached! World must contain 1 black anthill to be valid");
+		System.out.println("Limit not reached! World must contain 1 black anthill to be valid");
 	}
 	
 	/**
@@ -432,6 +449,7 @@ public class WorldEngine {
 		} catch (IOException e) {
 			System.out.println(e.toString());
 		}
+		return file.toString();
 		
 	}
 	

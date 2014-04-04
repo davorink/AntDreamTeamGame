@@ -20,16 +20,8 @@ public class Player {
 	public Player(String name, ArrayList<String> instructions) {
 		this.name = name;
 		this.color = null;
+		pointCounter = 0;
 		this.instructions = instructions;
-		winCounter = 0;
-	}
-	
-	/**
-	 * Return the instruction at the given state
-	 * @return The next instruction
-	 */
-	public String getState(int state) {
-		return instructions.get(state);
 	}
 
 	/**
@@ -69,15 +61,15 @@ public class Player {
 	 * @return number of points won
 	 */
 	public int getPoints() {
-		return winCounter;
+		return pointCounter;
 	}
 	
 	/**
 	 * Set points
 	 * @param number of points to increment by
 	 */
-	public int setPoints(int amount) {
-		this.points += amount;
+	public void setPoints(int amount) {
+		this.pointCounter += amount;
 	}
 	
 	/**
