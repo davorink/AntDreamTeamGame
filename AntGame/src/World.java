@@ -21,8 +21,8 @@ public class World {
 	 * @param p Position in the World
 	 * @return true if the cell at position p is rocky
 	 */
-	public boolean rocky(pos p){
-		return cells[p.getX()][p.getY()].getState() == ROCKY;
+	public boolean rocky(Pos p){
+		return cells[p.getX()][p.getY()].getState() == CellType.ROCKY;
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class World {
 	 * @param p Position in the World
 	 * @return true if there is an ant in the cell at position p
 	 */
-	public boolean some_ant_is_at(pos p){
+	public boolean some_ant_is_at(Pos p){
 		return cells[p.getX()][p.getY()].getAnt() == null;
 	}
 	
@@ -39,7 +39,7 @@ public class World {
 	 * @param p Position in the World
 	 * @return Ant if there is an ant in the cell at position p, null otherwise
 	 */
-	public Ant ant_at(pos p){
+	public Ant ant_at(Pos p){
 		if(some_ant_is_at(p)){
 			return cells[p.getX()][p.getY()].getAnt();
 		}
@@ -52,7 +52,7 @@ public class World {
 	 * @param p Position in the World
 	 * @param a Ant to be set
 	 */
-	public void set_ant_at(pos p, Ant a){
+	public void set_ant_at(Pos p, Ant a){
 		cells[p.getX()][p.getY()].setAnt(a);
 	}
 	
@@ -60,7 +60,7 @@ public class World {
 	 * Record the fact that no ant is at position p
 	 * @param p Position in the World
 	 */
-	public void clear_ant_at(pos p){
+	public void clear_ant_at(Pos p){
 		cells[p.getX()][p.getY()].setAnt(null);
 	}
 	
@@ -82,13 +82,13 @@ public class World {
 	 * @param id Ant's id number
 	 * @return current position of the ant with the given id, null if not existing
 	 */
-	public pos find_ant(int id){
+	public Pos find_ant(int id){
 		//TODO: Check if works!!!
-		for(int x=0; x!=cells.size(); x++){
-			for(int y=0; y!=cells[x].size(); y++){
+		for(int x=0; x!=cells.length; x++){
+			for(int y=0; y!=cells[x].length; y++){
 				if(cells[x][y].getAnt() != null){
 					if(cells[x][y].getAnt().getID == id){
-						return new pos(x,y);
+						return new Pos(x,y);
 					}
 				}
 			}
@@ -100,7 +100,7 @@ public class World {
 	 * Kills ant at position p.
 	 * @param pos Ant's position
 	 */
-	public void kill_ant_at(pos p){
+	public void kill_ant_at(Pos p){
 		clear_ant_at(p);
 	}
 	
@@ -109,7 +109,7 @@ public class World {
 	 * @param p Position of the cell
 	 * @return amount of food in the cell at position p
 	 */
-	public int food_at(pos p){
+	public int food_at(Pos p){
 		return cells[p.getX()][p.getY()].getFoodAmount();
 	}
 	
@@ -118,12 +118,12 @@ public class World {
 	 * @param p Position of the cell
 	 * @param f The amount of food to set at the cell position
 	 */
-	public void setFoodAt(pos p, int f){
+	public void setFoodAt(Pos p, int f){
 		int currentFood = food_at(p);
 		cells[p.getX()][p.getY()].setFoodAmount(f);
-		if (world.hillColorAt(p) != null) { //If the ant is dropping food on an ant hill
+		if (anthillColorAt(p) != null) { //If the ant is dropping food on an ant hill
 			f = f-currentFood; //Take away the food in the cell already accounted for
-			GameEngine.incClaimedFood(world.hillColorAt(p), f); //Increment the food for the ant hill teams colour by that amount
+			GameEngine.incClaimedFood(anthillColorAt(p), f); //Increment the food for the ant hill teams colour by that amount
 		}	
 		//TODO: Should it be enforced that the amount of food is not negative?
 	}
@@ -134,26 +134,26 @@ public class World {
 	 * @param c Colour of the anthill
 	 * @return true if the cell at position p is in the anthill of color c
 	 */
-	public boolean anthill_at(pos p, color c){
-		//TODO: color must be team's color from Enums! and check if null works
+	public boolean anthill_at(Pos p, TeamColor c){
+		//TODO: TeamColor must be team's color from Enums! and check if null works
 		return cells[p.getX()][p.getY()].getAnthillColor() == c;
 	}
 	
 	
-	public void set_marker_at(pos p, color c, int marker){
+	public void set_marker_at(Pos p, TeamColor c, int marker){
 		cells[p.getX()][p.getY()].setMarker(c,marker,true);
 	}
 	
-	public void clear_marker_at(pos p, color c, int marker){
+	public void clear_marker_at(Pos p, TeamColor c, int marker){
 		cells[p.getX()][p.getY()].setMarker(c,marker,false);
 	}
 	
-	public boolean check_marker_at(pos p, color c, int marker){
+	public boolean check_marker_at(Pos p, TeamColor c, int marker){
 		cells[p.getX()][p.getY()].getMarker(c,marker);
 	}
 	
-	public boolean check_any_marker_at(pos p, color c){
-		for(i=0;i<=5;i++){
+	public boolean check_any_marker_at(Pos p, TeamColor c){
+		for(int i=0;i<=5;i++){
 			if(cells[p.getX()][p.getY()].getMarker(c,i))return true;
 		}
 		return false;
@@ -164,7 +164,7 @@ public class World {
 	
 	
 	
-	public boolean cell_matches(pos p, String cond, color c){
+	public boolean cell_matches(Pos p, String cond, TeamColor c){
 		
 		if(rocky(p)){
 			if(cond.equals("Rock")){
@@ -175,13 +175,13 @@ public class World {
 		}
 		else{
 			if(cond.equals("Friend")){
-				return some_ant_is_at(p) && ant_at(p).getColour() == c;
+				return some_ant_is_at(p) && ant_at(p).getColor() == c;
 			}else if(cond.equals("Foe")){
-				return some_ant_is_at(p) && ant_at(p).getColour() != c;
+				return some_ant_is_at(p) && ant_at(p).getColor() != c;
 			}else if(cond.equals("FriendWithFood")){
-				return some_ant_is_at(p) && ant_at(p).getColour() == c && ant_at(p).getHasFood();
+				return some_ant_is_at(p) && ant_at(p).getColor() == c && ant_at(p).getHasFood();
 			}else if(cond.equals("FoeWithFood")){
-				return some_ant_is_at(p) && ant_at(p).getColour() != c && ant_at(p).getHasFood();
+				return some_ant_is_at(p) && ant_at(p).getColor() != c && ant_at(p).getHasFood();
 			}else if(cond.equals("Food")){
 				return food_at(p)>0;
 			}else if(cond.equals("Rock")){
@@ -193,11 +193,11 @@ public class World {
 					throw new Exception("Error with Marker in cell_matches!");
 				}
 			}else if(cond.equals("FoeMarker")){
-				return check_any_marker_at(p, color.other_color(c));
+				return check_any_marker_at(p, TeamColor.other_color(c));
 			}else if(cond.equals("Home")){
 				return anthill_at(p, c);
 			}else if(cond.equals("FoeHome")){
-				return anthill_at(p, color.other_color(c));
+				return anthill_at(p, TeamColor.other_color(c));
 			}
 		}
 		//Something went wrong.
@@ -205,27 +205,27 @@ public class World {
 	}
 		
 	
-	public int adjacent_ants(pos p, color c){
+	public int adjacent_ants(Pos p, TeamColor c){
 		int n = 0;
 		for(int d = 0; d<=5; d++){
-			pos cel = adjacent_cell(p,d)
-			if(some_ant_is_at(cel) && ant_at(cel).getColour() == c)n++;
+			Pos cel = adjacent_cell(p,d)
+			if(some_ant_is_at(cel) && ant_at(cel).getColor() == c)n++;
 		}
 		return n;
 	}
 	
 	
-	public void check_for_surrounded_ant_at(pos p){
+	public void check_for_surrounded_ant_at(Pos p){
 		if(some_ant_is_at(p)){
 			Ant a = ant_at(p);
-			if(adjacent_ants(p, color.otherColor(c)) >= 5){
+			if(adjacent_ants(p, TeamColor.otherColor(c)) >= 5){
 				kill_ant_at(p);
 				set_food_at(p, food_at(p)+3+ (int)a.getHasFood());
 			}
 		}
 	}
 	
-	public void check_for_surrounded_ants(pos p){
+	public void check_for_surrounded_ants(Pos p){
 		check_for_surrounded_ant_at(p);
 		for(int d = 0; d<=5; d++){
 			check_for_surrounded_ant_at(adjacent_cell(p,d));
@@ -233,7 +233,7 @@ public class World {
 	}
 	
 
-	public pos adjacent_cell(pos p, int direction){
+	public Pos adjacent_cell(Pos p, int direction){
 		int x = p.getX();
 		int y = p.getY();
 		switch(d){
@@ -278,10 +278,10 @@ public class World {
 		default:
 			throw new Exception("Error in adjacent_cell!");
 		}
-		return new pos(x,y);
+		return new Pos(x,y);
 	}
 	
-	public color anthillColorAt(pos p){
+	public TeamColor anthillColorAt(Pos p){
 		return cells[p.getX()][p.getY()].getAnthillColor();
 	}
 	
@@ -299,5 +299,9 @@ public class World {
 	
 	public Cell[][] getCells(){
 		return cells;
+	}
+	
+	public Ant[] getAnts(){
+		return ants;
 	}
 }

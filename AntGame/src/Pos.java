@@ -12,7 +12,7 @@ public class Pos {
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 */
-	public pos(int x, int y){
+	public Pos(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
