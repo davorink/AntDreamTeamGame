@@ -188,11 +188,11 @@ public class World {
 					throw new Exception("Error with Marker in cell_matches!");
 				}
 			}else if(cond.equals("FoeMarker")){
-				return checkAnyMarkerAt(p, TeamColor.other_color(c));
+				return checkAnyMarkerAt(p, TeamColor.otherColor(c));
 			}else if(cond.equals("Home")){
 				return anthillAt(p, c);
 			}else if(cond.equals("FoeHome")){
-				return anthillAt(p, TeamColor.other_color(c));
+				return anthillAt(p, TeamColor.otherColor(c));
 			}
 		}
 		//Something went wrong.
