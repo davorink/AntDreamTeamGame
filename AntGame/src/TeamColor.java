@@ -7,7 +7,7 @@
 public enum TeamColor {
 	RED, BLACK;
 	
-	public static TeamColor other_color(TeamColor c){
+	public static TeamColor otherColor(TeamColor c){
 		if(c == RED)return BLACK;
 		return RED;
 	}
