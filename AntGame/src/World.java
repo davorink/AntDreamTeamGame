@@ -149,7 +149,7 @@ public class World {
 	}
 	
 	public boolean checkMarkerAt(Pos p, TeamColor c, int marker){
-		cells[p.getX()][p.getY()].getMarker(c,marker);
+		return cells[p.getX()][p.getY()].getMarker(c,marker);
 	}
 	
 	public boolean checkAnyMarkerAt(Pos p, TeamColor c){
@@ -159,8 +159,7 @@ public class World {
 		return false;
 	}
 	
-	public boolean cellMatches(Pos p, String cond, TeamColor c){
-		
+	public boolean cellMatches(Pos p, String cond, TeamColor c){		
 		if(rocky(p)){
 			if(cond.equals("Rock")){
 				return true;
@@ -184,9 +183,9 @@ public class World {
 			}else if(cond.substring(0, 7).equals("Marker(") && cond.endsWith(")")){
 				if(cond.charAt(7) >= '0' && cond.charAt(7) <= '5' ){
 					return checkMarkerAt(p, c, cond.charAt(7)-48);
-				}else{
-					throw new Exception("Error with Marker in cell_matches!");
-				}
+				}//else{
+					//throw new Exception("Error with Marker in cell_matches!");
+				//}
 			}else if(cond.equals("FoeMarker")){
 				return checkAnyMarkerAt(p, TeamColor.otherColor(c));
 			}else if(cond.equals("Home")){
@@ -196,7 +195,8 @@ public class World {
 			}
 		}
 		//Something went wrong.
-		throw new Exception("Something is wrong in cell_matches!");
+		//throw new Exception("Something is wrong in cell_matches!");
+		return false;
 	}
 		
 	
@@ -271,7 +271,7 @@ public class World {
 			}
 			break;
 		default:
-			throw new Exception("Error in adjacent_cell!");
+			//throw new Exception("Error in adjacent_cell!");
 		}
 		return new Pos(x,y);
 	}

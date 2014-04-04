@@ -76,64 +76,58 @@ public class BrainEngine {
 		boolean validInstruction = false;
 		String[] instructionParts = instruction.split("\\s+"); //Split it into tokens by space
 		String action = instructionParts[0]; //Check what the action is
-		switch(action) {
-			case("sense"):
-				if (instructionParts.length >= 5) { //Make sure sense instruction is valid
-					if (legalDirections.contains(instructionParts[1]) && legalConditions.contains(instructionParts[4]) //Make sure all relevant elements are correct
-						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount
-						&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount) {
-						if (instructionParts[4].equals("marker") && instructionParts.length >= 6 //If its a marker condition, check the marker no
-							&& Integer.parseInt(instructionParts[5]) >= 0  && Integer.parseInt(instructionParts[5]) < 6) {
-							validInstruction = true;
-						}
-						else {
-							validInstruction = true;
-						}
-					}						
-				}
-				break;
-			case("move"):
-			case("pickup"):
-				if (instructionParts.length >= 3) {  //Make sure sense move & pickup instructions are valid
-					if (Integer.parseInt(instructionParts[1]) < lineAmount && Integer.parseInt(instructionParts[2]) < lineAmount) {
+		if (action.equals("sense")) {
+			if (instructionParts.length >= 5) { //Make sure sense instruction is valid
+				if (legalDirections.contains(instructionParts[1]) && legalConditions.contains(instructionParts[4]) //Make sure all relevant elements are correct
+					&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount
+					&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount) {
+					if (instructionParts[4].equals("marker") && instructionParts.length >= 6 //If its a marker condition, check the marker no
+						&& Integer.parseInt(instructionParts[5]) >= 0  && Integer.parseInt(instructionParts[5]) < 6) {
 						validInstruction = true;
 					}
-				}
-				break;
-			case("mark"):
-			case("unmark"):
-				if  (instructionParts.length >= 3) {  //Make sure sense mark & unmark instructions are valid
-					if (Integer.parseInt(instructionParts[1]) >= 0  && Integer.parseInt(instructionParts[1]) < 6
-						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount){
+					else {
 						validInstruction = true;
 					}
+				}						
+			}
+		}
+		else if (action.equals("move") || action.equals("pickup")) {
+			if (instructionParts.length >= 3) {  //Make sure sense move & pickup instructions are valid
+				if (Integer.parseInt(instructionParts[1]) < lineAmount && Integer.parseInt(instructionParts[2]) < lineAmount) {
+					validInstruction = true;
 				}
-				break;
-			case("drop"):
-				if  (instructionParts.length >= 2) { //Make sure drop instruction is valid
-					if (Integer.parseInt(instructionParts[1]) < lineAmount) {
-						validInstruction = true;
-					}
+			}
+		}
+		else if (action.equals("mark") || action.equals("unmark")) {
+			if  (instructionParts.length >= 3) {  //Make sure sense mark & unmark instructions are valid
+				if (Integer.parseInt(instructionParts[1]) >= 0  && Integer.parseInt(instructionParts[1]) < 6
+					&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount){
+					validInstruction = true;
 				}
-				break;
-			case("turn"):
-				if (instructionParts.length >= 3) { //Make sure turn instruction is valid
-					if (legalTurns.contains(instructionParts[1]) && Integer.parseInt(instructionParts[2]) < lineAmount) {
-						validInstruction = true;
-					}
+			}
+		}
+		else if (action.equals("drop")) {
+			if  (instructionParts.length >= 2) { //Make sure drop instruction is valid
+				if (Integer.parseInt(instructionParts[1]) < lineAmount) {
+					validInstruction = true;
 				}
-				break;
-			case("flip"):
-				if (instructionParts.length >= 4) { //Make sure flip instruction is valid
-					if (instructionParts[1].matches("\\d+") //Make sure the 2nd element contains at least one digit
-						&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount
-						&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount) {
-						validInstruction = true;						
-					}
+			}
+		}
+		else if (action.equals("turn")) {
+			if (instructionParts.length >= 3) { //Make sure turn instruction is valid
+				if (legalTurns.contains(instructionParts[1]) && Integer.parseInt(instructionParts[2]) < lineAmount) {
+					validInstruction = true;
 				}
-				break;
-			default:
-				break;
+			}
+		}
+		else if (action.equals("flip")) {
+			if (instructionParts.length >= 4) { //Make sure flip instruction is valid
+				if (instructionParts[1].matches("\\d+") //Make sure the 2nd element contains at least one digit
+					&& Integer.parseInt(instructionParts[2]) >= 0 && Integer.parseInt(instructionParts[2]) < lineAmount
+					&& Integer.parseInt(instructionParts[3]) >= 0 && Integer.parseInt(instructionParts[3]) < lineAmount) {
+					validInstruction = true;						
+				}
+			}
 		}
 		return validInstruction;
 	}

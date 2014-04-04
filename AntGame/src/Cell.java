@@ -73,13 +73,13 @@ public class Cell {
 	 * @param newValue New value of a marker
 	 * @throws Exception 
 	 */
-	public void setMarker(TeamColor c, int index, boolean newValue) throws Exception {
+	public void setMarker(TeamColor c, int index, boolean newValue) { //throws Exception {
 		if (c == TeamColor.RED) {
 			redMarkers[index] = newValue;
 		} else if (c == TeamColor.BLACK) {
 			blackMarkers[index] = newValue;
 		} else {
-			throw new Exception("At least one parameter is incorrect.");
+			//throw new Exception("At least one parameter is incorrect.");
 		}
 	}
 	
@@ -89,14 +89,18 @@ public class Cell {
 	 * @param i Array index
 	 * @throws Exception 
 	 */
-	public boolean getMarker(TeamColor c, int index) throws Exception {
+	public boolean getMarker(TeamColor c, int index) { //throws Exception {
 		if (c == TeamColor.RED) {
 			return redMarkers[index];
-		} else if (c == TeamColor.BLACK) {
-			return blackMarkers[index];
-		} else {
-			throw new Exception("At least one parameter is incorrect.");
 		}
+		else {
+			return blackMarkers[index];
+		}
+		//} else if (c == TeamColor.BLACK) {
+			//return blackMarkers[index];
+		//} else {
+			//throw new Exception("At least one parameter is incorrect.");
+		//}
 	}
 	
 	/**

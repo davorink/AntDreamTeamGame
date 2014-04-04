@@ -29,7 +29,7 @@ public class GameEngine {
 	 * @param The two players for this match
 	 * @param The filename of the world to play this match on, the world will be randomly generated if this parameter is null
 	 */
-	public static void runOneVsOne(Player[] players, String worldFile) {
+	public static void runOneVsOne(Player[] players, String worldFile) throws Exception {
 		// Define the players for this match.
 		matchPlayers = new Player[2];
 		matchPlayers[0] = players[0];
@@ -60,7 +60,7 @@ public class GameEngine {
 	 * This method processes a tournament between any number of players.
 	 * @param The players to be included in the tournament
 	 */
-	public static void runTournament(Player[] players) {
+	public static void runTournament(Player[] players) throws Exception {
 		
 		// Generate three worlds for this tournament.
 		String[] tournamentWorlds = new String[3];
@@ -128,7 +128,7 @@ public class GameEngine {
 	/**
 	 * Incrementally process each step for a match.
 	 */
-	private static TeamColor processMatch() {
+	private static void processMatch() {
 		// Execute 300,000 steps.
 		for (int stepCount=0; stepCount<300000; stepCount++) {
 			// Loop through each ant according to ID.
@@ -139,12 +139,20 @@ public class GameEngine {
 			// Check for surrounded ants.
 			for (int x = 0; x < WORLD_SIZE; x++) {
 				for (int y = 0; y < WORLD_SIZE; y++) {
-					matchWorld.check_for_surrounded_ants(new pos(x, y));
+					matchWorld.checkForSurroundedAnts(new Pos(x, y));
 				}
 			}
 			// Return a winner if either player has no remaining ants.
-			if (countAnts(TeamColor.RED) == 0) return TeamColor.RED;
-			if (countAnts(TeamColor.BLACK) == 0) return TeamColor.BLACK;
+			if (countAnts(TeamColor.RED) == 0) {
+				claimedRedFood = 0;
+				claimedBlackFood = 999;
+				return;
+			}
+			if (countAnts(TeamColor.BLACK) == 0) {
+				claimedRedFood = 999;
+				claimedBlackFood = 0;
+				return;
+			}
 			// Update the GUI.
 			// TODO: We could just include parameter of the world, and transfer these methods to world so that they can be called from the GUI.
 			// JOE~ GUI.stepUpdate(matchWorld.getCells(), matchWorld.getAnts(), stepCount, countAnts(TeamColor.RED), countAnts(TeamColor.BLACK), claimedFoodParticles(TeamColor.RED), claimedFoodParticles(TeamColor.BLACK));
