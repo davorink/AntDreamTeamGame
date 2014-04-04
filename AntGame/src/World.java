@@ -220,7 +220,7 @@ public class World {
 		}
 	}
 	
-	public void check_for_surrounded_ants(Pos p){
+	public void checkForSurroundedAnts(Pos p){
 		checkForSurroundedAntAt(p);
 		for(int d = 0; d<=5; d++){
 			checkForSurroundedAntAt(adjacentCell(p,d));
