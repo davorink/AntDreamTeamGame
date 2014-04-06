@@ -135,7 +135,6 @@ public class World {
 	 * @return true if the cell at position p is in the anthill of color c
 	 */
 	public boolean anthillAt(Pos p, TeamColor c){
-		//TODO: TeamColor must be team's color from Enums! and check if null works
 		return cells[p.getX()][p.getY()].getAnthillColor() == c;
 	}
 	
@@ -199,7 +198,12 @@ public class World {
 		return false;
 	}
 		
-	
+	/**
+	 * Returns number of enemy ants adjacent to the given ant.
+	 * @param p Position of the ant
+	 * @param c Color of the ant
+	 * @return Number of enemy ants adjacent
+	 */
 	public int adjacentAnts(Pos p, TeamColor c){
 		int n = 0;
 		for(int d = 0; d<=5; d++){
