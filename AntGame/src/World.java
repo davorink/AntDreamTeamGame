@@ -1,5 +1,6 @@
 /**
- * World represents the World in the Ant game. It contains cells and ants, and methods to check relationships between them.
+ * World represents the World in the Ant game. 
+ * Contains cells and ants, and methods to check relationships between them.
  * @author D Kopic
  */
 public class World {
@@ -131,26 +132,50 @@ public class World {
 	/**
 	 * Checks if the Cell contains an Ant.
 	 * @param p Position in the World
-	 * @param c Colour of the anthill
+	 * @param c Color of the anthill
 	 * @return true if the cell at position p is in the anthill of color c
 	 */
 	public boolean anthillAt(Pos p, TeamColor c){
 		return cells[p.getX()][p.getY()].getAnthillColor() == c;
 	}
 	
-	
+	/**
+	 * Sets a marker for the given color on the given position in the World.
+	 * @param p Position in the World
+	 * @param c TeamColor of the marker 
+	 * @param marker Marker index to be set
+	 */
 	public void setMarkerAt(Pos p, TeamColor c, int marker){
 		cells[p.getX()][p.getY()].setMarker(c,marker,true);
 	}
 	
+	/**
+	 * Clears a marker for the given color on the given position in the World.
+	 * @param p Position in the World
+	 * @param c TeamColor of the marker 
+	 * @param marker Marker index to be cleared
+	 */
 	public void clearMarkerAt(Pos p, TeamColor c, int marker){
 		cells[p.getX()][p.getY()].setMarker(c,marker,false);
 	}
 	
+	/**
+	 * Checks a marker for the given color on the given position in the World.
+	 * @param p Position in the World
+	 * @param c TeamColor of the marker 
+	 * @param marker Marker index to be checked
+	 * @return True if the marker is set.
+	 */
 	public boolean checkMarkerAt(Pos p, TeamColor c, int marker){
 		return cells[p.getX()][p.getY()].getMarker(c,marker);
 	}
 	
+	/**
+	 * Checks ifthere is any marker for the given color on the given position in the World.
+	 * @param p Position in the World
+	 * @param c TeamColor of the marker 
+	 * @return True if any marker for the given color is set
+	 */
 	public boolean checkAnyMarkerAt(Pos p, TeamColor c){
 		for(int i=0;i<=5;i++){
 			if(cells[p.getX()][p.getY()].getMarker(c,i))return true;
@@ -158,6 +183,14 @@ public class World {
 		return false;
 	}
 	
+	/**
+	 * Takes a position, a condition, and a color of the ant that is doing the sensing), 
+	 * and checks whether the condition holds at the given position.
+	 * @param p Position to check.
+	 * @param cond Condition
+	 * @param c Color of the ant.
+	 * @return True if condition holds.
+	 */
 	public boolean cellMatches(Pos p, String cond, TeamColor c){		
 		if(rocky(p)){
 			if(cond.equals("Rock")){
@@ -213,7 +246,10 @@ public class World {
 		return n;
 	}
 	
-	
+	/**
+	 * Checks the number of enemy ants adjacent to the given ant and kills it if more than 5.
+	 * @param p Position of the ant
+	 */
 	public void checkForSurroundedAntAt(Pos p){
 		if(someAntIsAt(p)){
 			Ant a = antAt(p);
@@ -224,6 +260,10 @@ public class World {
 		}
 	}
 	
+	/**
+	 * Checks for surrounded ants.
+	 * @param p Position of the ant
+	 */
 	public void checkForSurroundedAnts(Pos p){
 		checkForSurroundedAntAt(p);
 		for(int d = 0; d<=5; d++){
@@ -231,7 +271,12 @@ public class World {
 		}
 	}
 	
-
+	/**
+	 * Calculates the position of the cell adjacent to p in the given direction.
+	 * @param p Position of the Cell
+	 * @param direction Direction to calculate.
+	 * @return Position of the adjacent cell in given direction.
+	 */
 	public Pos adjacentCell(Pos p, int direction){
 		int x = p.getX();
 		int y = p.getY();
@@ -264,15 +309,27 @@ public class World {
 		return new Pos(x,y);
 	}
 	
+	/**
+	 * Get the anthill color at the position. 
+	 * @param p Position to check.
+	 * @return Color of the anthill at p, null if no anthill.
+	 */
 	public TeamColor anthillColorAt(Pos p){
 		return cells[p.getX()][p.getY()].getAnthillColor();
 	}
 	
-	
+	/**
+	 * Get all cells in the world.
+	 * @return All cells in the World.
+	 */
 	public Cell[][] getCells(){
 		return cells;
 	}
 	
+	/**
+	 * Get all ants in the world.
+	 * @return All ants in the World.
+	 */
 	public Ant[] getAnts(){
 		return ants;
 	}
