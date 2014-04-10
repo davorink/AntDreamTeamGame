@@ -1,13 +1,7 @@
+ --- DREAM TEAM SOFTWARE PRESENTS TO YOU ---
+
 Ant Wars
 ================
-
- --- DREAM TEAM SOFTWARE PRESENTS TO YOU ---
-   _____    __________________  __      __  _____ __________  _________
-  /  _  \   \      \__    ___/ /  \    /  \/  _  \\______   \/   _____/
- /  /_\  \  /   |   \|    |    \   \/\/   /  /_\  \|       _/\_____  \ 
-/    |    \/    |    \    |     \        /    |    \    |   \/        \
-\____|__  /\____|__  /____|      \__/\  /\____|__  /____|_  /_______  /
-        \/         \/                 \/         \/       \/        \/ 
 
 Running instructions:
 
@@ -29,8 +23,11 @@ Project Representative: Kieran King
 Group Coursework Project, by the specification for Software Engineering module at the University of Sussex, Brighton UK.
 
 Most of the material used in the Ant Wars game is originally produced by the team.
+
 Many thanks to:
+
 Slick2D, Java 2D Game Library - http://slick.ninjacave.com/
+
 k//eternal, Start Screen Music (from NEX theme for stepmania 3.9) - http://stepmaniathings.com/downloads/themes/sm-39/nex.html
 
 April 2014, University of Sussex, Brighton, United Kingdom
