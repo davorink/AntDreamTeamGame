@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="N:/Y2-S2-Docs/SE Project/lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="N:/Y2-S2-Docs/SE Project/lib/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="N:/Y2-S2-Docs/SE Project/lib/slick.jar"/>
+	<classpathentry kind="lib" path="N:/Y2-S2-Docs/SE Project/lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="N:/Y2-S2-Docs/SE Project/lib/jorbis-0.0.15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
