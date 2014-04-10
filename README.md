@@ -1,7 +1,8 @@
  --- DREAM TEAM SOFTWARE PRESENTS TO YOU ---
-
-Ant Wars
+Ant Wars Game
 ================
+
+Ant Wars is a competitive two-player strategy simulation game.
 
 Running instructions:
 
